@@ -1,0 +1,263 @@
+version control með git, leyfir manni að save kóða/verkefni á mismunandi stöðum svo að ef maður klikkar eða er ekki sáttur með
+núverandi kóða þá er alltaf hægt að fara aftur í "backupið" nema það er hægt að fara í hvaða save sem maður gerði fram og til baka.
+
+það þarf að initiliza git
+
+git init
+
+hér er ný "falin" skrá búinn til, annaðhvort hægt að sjá með því að checka í hidden items í view inní folder, eða ls -a inní bash
+
+til að byrja tracka allar útgáfur og byrja version control þá þarf að bæta skránni við
+í það sem heitir stagin area
+
+staging area - staður þar sem það er hægt að velja hvaða skrá/ útgáfu af skrá maður vill nota
+---til að sjá hvað er inní stagin area þá er notað
+
+git status
+
+hér sjáum við að skráin 'c1' er 'untracked' og til að breyta því/ bæta skránni á gi þá er notað:
+
+git add c1.txt
+
+til að bæta öllum skránnum inní ákveðnu folderi inn þá er notað:
+
+git add .
+
+til að bæta við commit skilaboði þá er notað:
+
+git commit -m "skilaboð"
+
+mikilvægt að vera skýr og hnitmiðaður með git commit, fyrsta má vera "initial commit" en hin þurfa að útskýra frekar nákvæmlega breytinguna á skránni
+-það er hægt að fara yfir hvaða breytingar maður er búinn að gera með:
+
+git log
+
+ef ég er með þrjár textaskrár ('c1.txt', 'c2.txt', 'c3.txt',) og ég er búinn að gera git commit -m "allar þrjár .txt með texta" 
+þá get ég séð með git status að það er allt í góðu en ef ég breyti einni skrá (textanum inní) þá sé ég eftir að ég geri
+git status í rauðu "modified: c3.txt", ég get séð hvaða breyting átti sér stað með:
+
+git diff
+
+-
+$ git diff
+diff --git a/c3.txt b/c3.txt
+index 13fb68b..bf3f78c 100644
+--- a/c3.txt
++++ b/c3.txt
+@@ -1 +1 @@
+-sól
+\ No newline at end of file
++sól og vindur
+\ No newline at end of file
+
+
+---upprunalegi textinn inní c3.txt var sól, en ég breytti honum í sól og vindur en gerði aldrei git commit eftirá.
+
+ef þetta er villa og ég vil breyta aftur á gömlu skránna (upprunalegu c3.txt) þá er hægt að:
+
+git checkout c3.txt
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+repository á github,
+pusha okkar eigið project inná nýja git verkefnið, inní: '…or push an existing repository from the command line'
+
+fyrst er að copya linkinn sem birtist:
+https://github.com/storval/fyrstagaman.git
+
+-opna terminal/ github
+-finna möppuna með projectinu inní bash
+-búa til remote repository
+--- git add remote origin (bæta inn fyrrum commit í remote repositoríið)
+- git push -u origin master (kannski main í stað master)-- þetta ýtir local repo yfir í remote repo(origin fer yfir í master)
+
+gitignore er til að fela ákveðnar skrár með td. API keyum eða psw eða eh
+
+touch .gitignore
+
+
+git rm --cached -r .	(removar allt úr skránni frá git staging area)
+
+git status		(hér eru allar skrárnar í rauðu til að láta vita hvað gerðist)
+
+inní .gitignore er hægt að skrifa núna hvaða skrár eiga ekki að fara á netið í remote/local repo
+---á hverri línu þarf að vera nafn á hvaða skrá maður vill eyða (alltaf ýta á enter milli hverrar skrár sem á ekki að git addast)
+
+
+til að clonea/ná í projectið sitt frá git til að vinna locally, þá er það að finna project sem maður vill, ýta á clone/ download
+copya link (í staðinn fyrir að downloada beint,) og fara svo á góðan stað í bash og skrifa:
+
+git clone https://linkurinnFráGitKemurHérna.is
+
+---og eftir það er þá hægt að fara inní möppuna/staðinn af downloadaða projectinu og skoða td. git log
+til að sjá hvaða commit þau eru búinn að gera fyrir projectið sitt
+
+
+
+
+það er hægt að búa til branches til að prófa eitthvað nýtt/experimental/laga kóðann osefrv, ef maður vill ekki breyta "master branchinu" strax
+ýminda sér logoið af git hub,
+
+                    1-------experimental 2.0
+             1-------experimental
+main-1-------2-------3---------4---------4.5-----------main
+             1-------fix bugs  
+
+
+til að búa til nýtt branch, fara inní bash og:
+
+git branch nafnÁBranchi
+
+til að sjá hvaða branch eru núna í projectinu, í bash (stjarna fyrir framan sýnir á hvaða branchi við erum á)
+
+git branch
+
+-*master
+-nafnÁBranchi
+
+til að fara í nýtt branch þá:
+
+git checkout (nafn á branchinu sme maður vill færa sig á)
+
+git checkout nafnÁBranchi
+
+
+
+1. ég  breyti skránnum sem eru inní git story, (projectið)
+2. ég geri git add . inní bash
+3. ég geri git commit -m "bætti við smá twist í textann"
+
+
+frekar crazyyy
+
+þegar maður skiptir fram og til baka um branches þá er hægt að sjá textann breytast í textaskránnum!
+git checkout master -sól
+git checkout twist --sól, sól sem skein
+git checkout master -sól
+
+
+ef maður er fastur eftir git log eða git diff þá er það :q til að fara út
+
+:q
+
+
+til að setja það sem maður er búinn að safea og vinna í á git/updatea inná git þá er það git push
+git push ´
+
+
+
+git push -u origin main
+X
+
+git push -u origin master
+v
+
+greinilega getur komið upp villa með að nota main í staðinn fyrir master (eh controversy), 
+
+
+
+
+smá recap..
+
+1. git init inní nýrri möppu
+2. búa til skrár
+3. nota git add . eða git add index.html/hvaða skrá sem er
+4. git commit -m "var að búa til skrá"
+5. git status til að athuga....nothing to commit, working tree clean
+6. git log sjá hvaða breytingar hafa átt sér stað
+7. git push -u origin master (núna er hægt að nota git push í staðinn fyrir að skrifa þetta allt alltaf)
+8. git push
+9. inná github á að vera kominn breyting!
+
+
+
+það er hægt að mergea saman branches með pull request, 
+
+
+það þarf að bæta við SSH key til að tengja tölvuna almennilega við github, nota sama netfang og maður notar fyrir github
+
+ssh-keygen -t rsa -b 4096 -C "aronbjarklind@gmail.com"
+
+
+
+athuga hvort SSH key sé núþegar til:
+
+ls -al ~/.ssh
+
+síðan:
+
+clip < ~/.ssh/id_rsa.pub
+
+fara svo inná github, undir settings 
+
+
+
+þþað þarf ekki að ýta á ctrl+ ins til að copya, nóg að highlighta með að halda inni með músinni !
+
+
+
+-u
+
+þýðir það sama og --set-upstream
+
+til að búa til nýtt branch og save-a það þá eru þessu skref:
+
+1. búa til nýtt branch, git chekcout -b nýttBranch eða git branch nýttBranch
+2. inní nýja branchinu að búa til eða breyta skrá
+3. git add . setja skránna í staging area
+4. git commit -m "upplýs um breytinguna" og committa
+5. git push (þarf að vera búinn að gera git push -u origin master einhverntímann á undan inní projectinu)
+6. fatal: the current... hér þarf að fylgja leiðbeiningunum sem maður fær og búa til nýtt upstream fyrir nýja branchið: git push -u origin nýjaBranch
+
+
+pull request
+--notað til að skoða hvaða breyting átti sér stað og hvort hún virki áður en það er mergeað!
+----næstum því eins og staging area áður en tvær branches eru mergaðar
+
+
+ahhh skooo,,,,!!
+þannig að ef það eru "ósaveuð" branches sem maður er búinn að vera vinna í þá er alltaf hægt að bæta þeim við github með því að
+fara inní branchið sjálft og git status, til að sjá hvort að allt sé good, git commit (smá info) og síðan git push -u origin <nafnið á branchinu>
+
+til að deleta branch þá er það:
+git branch -d nafniðÁBranchinu
+
+ef það virkar ekki þá er það -D með stóru:
+git branch -D nafniðÁBranchinu
+
+til að eyða remote branch frá github (bara github ekki locally):
+git push origin --delete nafniðÁBranchinu
+
+
+það er hægt að committa og adda á sama tíma (mayb ekki sniðugt strax gott að vita (virkar bara fyrir modified files en ekki new file)):
+git commit -am "bætti við skrá"
+
+git pull (inní bash (pull request))
+ef maður gerir breytingar td á github þá þarf að pull requesta svo að local og remote sé það sama
+
+
+
+forking 
+--næstum því eins og að clona nema í staðinn fyrir að maður sé með projectið locally þá er "clonast það" beint á github (remote)
+-----copya hugmynd frá einhverjum til að vinna í henni beint á remote repo!
+
+cloning
+--eftir að maður er búinn að forka verkefnið þá er hægt að clona það til að hafa það beint á manns eigin tölvu
+-----skoða hvort það sé hægt að clona beint
+
+ef maður vill hjálpa einhverjum með project eftir að maður forkaði og clonaði þá er hægt að gera pull request til að suggesta breytinguna
+---átæðan afh þetta er pull en ekki push er afþví að maður á ekki projectið, heldur er maður að spurja manneskjuna sem á projectið
+-----hvort að henni lýst vel á breytingarnar og vilji sjálf gera pull request á þær breytingar sem ég hef gert
+
+
+vaaa fork og clone og ábendingar með pull request sem breytist í merge er mjög coool
+---hægt náttl að breyta hvaða projecti sem er á github, gera það að manns eigin eða hjálpast að með það, sweety
+
+ 
+
+space repitition
+maður lærir eitthvað, kemur aftur af því seinna, eftir viku, mánuð... og þá hamrast inn það sem maður hefur lært (ca hnotskurn, skoða betur)
+
+
+

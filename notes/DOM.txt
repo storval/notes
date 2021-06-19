@@ -1,0 +1,196 @@
+læra betur á JS til að skilja DOM fullkomnlega
+
+allt hérna efst og fyrir ofan línuna er notes þegar ég skimaði yfir DOM námskeiðið og átti erfitt (fyrir neðan byrjaði ég aftur):
+------------------------------------------------------------------------------------------------------------------------------
+
+
+Pure JavaScript er þegar maður runnar hana í gegnum console eða snippet í chrome.
+
+Javascript virkar svipað og CSS þegar það kemur að inline, internal og external
+
+Inline Javascript: <body onload="alert('hello')">
+-- muna hér að í staðinn fyrir að vera með fjórar gæsalappir <body onload="alert("hello")"> að þá er best að það string
+----sem er verið að nota sé bara í einföldum gæsalöppum '' ... annars heldur tölvan að "alert(" og "(" séu string. 
+
+það er alls ekki mælt með inline Javascript, rétt eins og með inline css, mikið af bugs og ekki modular.
+
+
+internal javascript:    <script type="text/javascript">alert("heloo");</script>
+
+
+external JavaScript:	<script src="index.js"></script>
+-- hér þarf að vanda vel á hvaða stað maður setur external JS tagið.
+
+
+ef scriptið sem maður býr til td. alert er fyrir ofan td. CSS file, þá gæti það ýtt á "pásu" á html flowinu, stíllinn
+verður þá ekki nýttur frá css fyrr en við erum búinn að ýta á OK fyrir JS scriptið.
+--muna að hafa JS alltaf fyrir NEÐAN það sem maður vill breyta þannig að það sé til.
+
+----Gott practice að geyma allan JS kóðann neðst, rétt fyrir ofan <body>
+
+DOM tré: í hvaða röð og hverjir eru parent og child.. <div><p>lala</p></div>, div parent, p child 
+frá fyrsta parent niðrí seinasta(document-->head og body-->div-->p)
+
+til að velja element úr DOM trénu, þá er hægt að nota.... document.firstElementChild.FirstElementChild;
+-- sjá soon hvort það sé "fallegri" einfaldari leiðir til að kalla eh sérstakt úr DOM.
+--------------------------------------------------------------------------------------------------------------------------------
+
+
+hér eru notes frá því þegar ég byrjaði aftur:
+
+
+
+inní console eða snippet á einhverri síða sem m bjó til..
+
+
+document;
+---sýnir allt documentið
+
+document.firstElementChild;
+---sýnir allt HTMLið
+
+document.firstElementChild.firstElementChild;
+---sýnir fyrsta "child" af HTMLinu (head)
+
+document.firstElementChild.lastElementChild;
+---sýnir seinasta "child" af HTMLinu (body)
+
+document.firstElementChild.lastElementChild.firstElementChild;
+---sýnir fyrsta "child" sem er inní td.(H1)
+
+
+núna getur verið sniðugt að safea þessa löngu runu fyrir það element sem m vill breyta inní var:
+
+var storTexti = document.firstElementChild.lastElementChild.firstElementChild;
+storTexti.innerHTML = "hvaða breyting á string sem maður vill"
+storTexti.style.color = blue (breytir textanum í bláan lit)
+
+
+document.querySelector("input").click();
+
+-- það sem þetta mun gera er í fyrsta lagi querySelector mun fara í gegnum allt documentið til að leita af "input"/checkboxi
+-- í öðru lagi mun núna vera búið að checka í checkboxið eftir að maður runnar kóðann.
+
+
+hlutir inní DOM trénu geta verið með PROPERTIES eða METHOD
+
+properties = hvernig hluturinn er..........bíllinn er rauður, með 5 hurður, svartar felgur, spoiler og glasahaldara.
+    method = hvað hluturinn getur gert.....bíllinn er 800 hestöfl, með cruise control, hita í sætunum og hátalarakerfi.
+
+bill.color;
+red
+(get property)(fá upplýs um eh)
+
+bill.color = green;
+green
+(set property)(breyta einhverju)
+
+bill.keyra();
+núna keyrir bíllinn.
+(call method)(fá hlutinn til að gera eitthvað)
+
+
+method = eitthvað sem einhver hlutur getur gert-----
+function = eitthvað sem gerist við eitthvað
+
+
+var fyrstaP = document.firstElementChild.lastElementChild.firstElementChild.firstElementChild;
+fyrstaP.innerHTML = "down the yellow road";
+(hérna breytti ég textanum inní div kassa í texti niður htmlinu (inní html test folder))
+
+
+----skoða let og const í staðinn fyrir var, sumir að pointa það út í commentunum f javaScript----
+
+
+document.getElementsByTagName("p")
+= allt það sem er <p> á vefsíðunni
+--------------------------------------sniðugt til að velja öll element sem eru í sama flokki.
+munurinn á þessu og querySelector er að getElements er fyrir marga hluti, querySelector er fyrir stakan hlut.
+
+muna bara að með querySelector að við fáum array til baka þannig að sú regla þarf að fylgja ef við ætlum að breyta einhverju
+
+document.getElementsByTagName("p")[0,5].style.color = "green"
+---hér er ég búinn að breyta litnum á fyrstu fjórum <p> í græn með því að specifia með []
+
+
+document.getElementsByClassName("stortTextabox")
+= allt sem er með classið í css .stortTextabox
+hér þarf að muna að þó að við séum að breyta aðeins einum hlut að við fáum hann til baka í array []
+afþví að þetta er fleirtala (elements) og þá þarf að breyta með reglunum hér fyrir ofan.
+td:
+document.getElementsByClassName("btn1")[0].style.backgroundColor ="yellow"; 	
+
+document.getElementById("storTala")
+= aðeins EINN hlutur (element en ekki elements)
+finna og breyta einhverju sem hefur ID inní html/css.... td:
+----document.getElementById("storTexti").innerHTML = "lalalelele"
+
+með document.querySelectorAll() þá er hægt að velja marga hluti, eins og class, id og css selector allt á sama tíma! td:
+document.querySelector("#top .listi")
+
+
+---
+lang vinsælast af öllum þessum selectors að nota querySelector og querySelectorAll, getur langoftast gert það
+sem getElements gæjarnir gera.
+---
+
+
+útaf hvernig javaScript notar camelCasingText að þá eru hlutir sem maður vill breyta með query selector eða allt fyrir ofan
+td, elementi eins og font-size í css, sem er fontSize = "blue" í javaScript,,, muna bara að tékka á nýjum syntax.
+-----ruleofthumb er að þau eru css styleinn og javaScript syntax fyrir það er eins nema, mínus dash og plús camelCasing.
+oooggg líka,, í javaScript þarf það að vera representað sem "string" en ekki einfaldlega tölur.
+
+
+---ekki gott practice að breyta stílum með JavaScript, en gott ef það er fyrir ákveðið function----
+---hér minnir hún á the basics, not HTML fyrir strúktúr, CSS fyrir stíl, JavaScript fyrir function.
+
+
+.btn1 {}
+document.querySelector("button").classList ....gefur lista af öllum classunum sem á við button td. .btn1
+document.querySelector("button").classList.add("btnHverfa")... bætir við .btnHverfa sem auka class við .btn1
+núna er: .btn1 btnHverfa {}
+
+til að láta hann svo hverfa er hægt að:
+document.querySelector("button").classList.remove("btnHverfa")
+núna er: .btn1 {}
+
+til að láta hann "toggla" er hægt að:
+document.querySelector("button").classList.toggle("btnHverfa")
+----sem þýðir að ef hann er ekki á, kveiktu þá á honum, returnið er annaðhvort true eða false, sem þýðir að þþað er hægt
+að copy pastea
+document.querySelector("button").classList.toggle("btnHverfa") true
+document.querySelector("button").classList.toggle("btnHverfa") false
+document.querySelector("button").classList.toggle("btnHverfa") true
+
+--þetta þýðir í raun ef þetta er svona gerðu þá þetta, slökkva og kveikja á ljósrofa.
+
+hér er líka hægt að búa til class sem tengist ekki neinu inní HTML og adda/toggla/slökkva/kveikja á honum með JavaScript
+---þe búa til class í CSS nota síða classList.add oog bæta honum þannig við hvaða html element sem m vill.
+
+
+
+
+ef ég er með <h1> sem er italicised með <i> þá get ég skoðað og breytt þeim upplýs á tvo vegu:
+
+document.querySelector("h1").innerHTML;		..tags og texti
+"<i>hello world<i>"
+document.querySelector("h1").textContent;	..aðeins texti
+"hello world"
+
+
+allt sem fer inní tag annað en tagið sjálft er attribute, þe; class, href, src, type osfrv.
+
+document.querySelector("a").attributes;
+hér kemur þá listi af attribute við það sem maður specifiaði inní querySelector
+
+document.querySelector("a").getAttribute("href");	(eintala!)
+"https://www.archive.org"
+----hér er getAttribute notað til að sjá hvað attributeið er, og hvort maður hafi valið rétt.
+
+document.querySelector("a").setAttribute("href", "https://www.leikjanet.is)
+----hér er setAttribute notað til að breyta linknum frá archive yfir í leikjanet
+
+
+muna hvernig random dice er í js:
+
+var randomNumber1 = Math.floor(Math.random() * 6) + 1;

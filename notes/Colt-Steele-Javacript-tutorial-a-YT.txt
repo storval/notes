@@ -1,0 +1,400 @@
+hehe
+
+https://www.youtube.com/watch?v=x2RNw4M6cME&list=WL&index=1
+(Colt Steele, JavaScript námskeið á youtube)
+
+það er hægt að gera "power of"... með því að gera ** ... (3**3 = 27)
+
+NaN = ekki tala (Not a Number)
+
+
+Nota let í staðinn fyrir var
+
+
+let hiti = 10;
+hiti = hiti + 1;
+hiti;
+=11
+
+það sama má gera með +=
+
+let heitt = 20;
+heitt += 3;
+heitt;
+=23
+
+
+const virkar alveg eins og let, nema það getur ekki breyst um value!
+
+const myTime = 100;
+myTime = 130;
+= ERROR
+
+const myRange = 800
+myRange += 20
+= ERROR
+
+afhverju að nota const yfir let? -- fyrir þau value sem við viljum alls ekki að breytist, eitthvað sem er alltaf eins.
+
+recap, Boolean er true/ false
+
+
+let hlaupa = 'langt útí buskann';
+hlaupa.replace('útí buskann', 'í burtu');
+= 'langt í burtu'
+
+NEMA HVAÐ! (muna)
+við þurfum að búa til nýtt let til þess að geyma þessar upplýsingar permanently. afþví að hlaupa er ennþá:
+
+hlaupa;
+'langt útí buskann' 
+
+let labba = 'út í góða veðrinu';
+let labbandi = labba.replace('góða', 'okay');
+labbandi;
+= 'út í okayy veðrinu'
+
+
+
+let ha = 'ha';
+ha.repeat(10);
+ha;
+= 'hahahahahahahahahaha'
+
+NEMA HVAÐ (muna aftur)
+að ha er ennþá bara eitt ha, nema ef við gefum því nýtt let. alveg eins og fyrir ofan.
+
+ha;
+= 'ha'
+
+let hlatur = 'he';
+let hlaeja = hlatur.repeat(10);
+hlaeja;
+'hehehehehehehehe'
+
+
+
+nýtt í javascript er template literals.
+-- syntaxinn er `string eitthvað og síðan ${let eða const eða reikningsdæmi}`
+
+let eigandi = 'Rachel';
+`welkominn heim ${eigandi}`;
+= velkominn heim Rachel
+
+til að gera `` þá er AltGr + (+*) takkinn.
+muna líka að nota vandaðann og réttan syntax hérna.
+
+ef við viljum gera ráð fyrir einhverju sem á eftir að declarea 
+eins og let eða const inní einhverjum string þá er sniðugt að nota þetta.
+
+
+indexof
+segir hvar í string af tilgreindu orði/ staf eða setningu það birtist fyrst.
+
+var array = [2, 9, 9];
+array.indexOf(2);
+=0
+array.indexOf(9);
+=1
+array.indexOf(7);
+= -1
+
+gefur -1 ef hluturinn er ekki inní því sem við erum að leita af með indexOf.
+
+
+Null 
+"intentional absence of any value"
+---- það sem á að vera ekkert, nota Null stundum í staðinn fyrir að skrifa 0 eða skilja eitthvað autt.
+
+undefined 
+variable sem á eftir að skilgreina
+
+
+muna að öll þessi tákn hérna
+
+<	minna en
+>	meira en
+<=	minna eða jafnt
+>=	meira eða jafnt
+==	janft og sama hvaða type það er
+!=	ekki jafnt og sama hvaða type það er
+===	jafnt bara ef það er sama type
+!===	ekki jafnt bara ef það er sama type
+
+6 == "6"
+True
+
+6 === "6"
+False
+
+ALLIR ÞESSIR COMPARISONS RETURNA BOOLEAN VALUR = TRUE/FALSE
+
+
+fallegur heads or tails kóði:
+
+let coinToss = Math.random();
+
+if (coinToss < 0.5) {
+    console.log("fiskur!")
+} else {
+    console.log("skjaldamerki!")
+}
+
+
+muna að með IF og ELSE og ELSE IF
+---ef við erum bara með tvennt sem kemur til greina:
+if... else
+
+---ef við erum með margt sem kemur til greina
+if... else if.... else if... else
+
+
+það er líka hægt að nesta mörg if og else og else ifs:
+
+let stig = 80;
+if stig >= 60) {
+   console.log("vel gert")
+   if (stig >= 70) {
+   console.log("mjög vel gert!")
+}
+}
+
+---nested ifs mun bara virka ef fyrra if er satt, þannig að þegar eitthvað er satt, athugaðu
+þá meira specifically með þessu akua if. MUN SAMT CONSOLE.LOGA FYRIR BÆÐI:
+
+
+="vel gert"
+="mjög vel gert!"
+
+afþví að bæði if eru sönn.
+
+
+bannað að gleyma:
+
+&& ---- og
+|| ---- eða
+!  ---- er ekki
+
+
+7 === 7 && 2 > 4;	hér þarf bæði að vera satt
+false
+
+7 === 7 || 2 > 4;	hér þarf annaðhvort að vera satt
+true 
+
+7 !== 7;		hér þarf allt að vera false
+false
+
+7 !== 8;		hér er true að 7 er ekki 8
+true
+
+
+
+muna með arrays að það er hægt að accessa það með mjög einföldum hætti
+
+let godiSkoli = ['james', 'louie', 'mary']
+
+godiSkoli[0]; = james
+godiSkoli[1]; = louie
+godiSkoli[2]; = mary
+godiSkoli[3]; = undefined
+
+
+taka vel eftir hérna hvernig [] --squre brackets, getur verið notað sem index of. td
+
+godiSkoli[1][2]; = u
+afþví að þriðju stafurinn í louie er "u", sem er ofcyy representað með 2,
+afþvíi aðð,, mest bannað að gleyma að in code þá byrjar maður alltaf að telja með 0.
+
+----------------------------------------------------------------------------------------------------------
+push---pop---shift---unshift
+
+godiSkoli.push('liano');
+
+['james', 'louie', 'mary', 'liano']
+muna hvernig SYNTAXINN Á PUSH ER. ()
+
+godiSkoli.pop();
+=liano
+
+godiSkoli;
+['james', 'louie', 'mary']
+
+--POP tekur seinasta itemið inní array út, en displayar það fyrst í console. 
+þe sýnir hvað við tókum út, og tekur það svo út
+
+
+godiSkoli.shift();
+=james
+
+godiSkoli;
+['louie', 'mary']
+
+--shift gerir það sem pop gerir nema alveg í byrjun í staðinn fyrir í lokin,
+sýnir líka hvað við tókum út, og tekur það svo út
+
+
+godiSkoli.unshift('rames');
+
+godiSkoli;
+['rames', 'louie', 'mary']
+
+bætir einhverju við BYRJUNINA á arrayinu. alveg eins og push nema í byrjun.
+
+getur verið vinsælt að nota const í staðinn fyrir let þegar maður er með arrays
+afþví að það er oft eh value sem við viljum ekki breyta OG ÞÓ... þá má nota push, pop, shift og unshift fyrir const.
+----------------------------------------------------------------------------------------------------------------------
+
+
+það er hægt að nesta array:
+
+const ticTac =[['o', 'o', 'x'], ['o', 'x', 'o'], ['x', 'o', 'x'], ]
+þetta lítur svona út:
+
+['o', 'o', 'x']
+['o', 'x', 'o']
+['x', 'o', 'x']
+
+til að breyta einhverju núna þá er hægt að nota [][]
+
+td. ef o-ið til hægri í miðjunni átti að vera x í staðinn þá:
+
+ticTac[1][2] = 'x';
+
+
+-------------------------------------------------------------------------------------------------------------------
+
+OBJECT
+
+til að búa til object:
+const lolo = {};
+
+const hii = {nafn: 'john', ættarNafn: 'lome', hæð: 180 };
+
+
+til að bæta við objectið hii:
+
+hii['áhugamál'] = 'fara í sund'
+hii;
+hii {nafn: "john", ættarNafn : "lome", hæð: 180, áhugamál: "fara í sund"}
+
+
+núna er hægt að kalla fram einhvern hlut úr hii með því að nota hii.nafn/ættarnafn/hæð etc:
+
+hii.nafn;
+john
+
+
+ótrúlega einföld leið til að bæta hlutum inní þennan object hii er svona:
+
+hii.vinir = ['samantha', 'jack']
+hii;
+hii {nafn: "john", ættarNafn : "lome", hæð: 180, áhugamál: "fara í sund", vinir: Array(2)}
+
+---inní Array(2) er núna 'samantha', 'jack'
+
+
+með object er vinsælt að nesta aðra objecta inní arrays:
+
+const vinir = [{nafn: 'lane', aldur: 89}, {nafn: 'rimon', aldur: 39}]
+hii.besties = vinir;
+hii;
+hii {nafn: "john", ættarNafn : "lome", hæð: 180, áhugamál: "fara í sund", vinir: Array(2), besties: Array(2)}
+
+
+til að fá upplýs/ breyta/ bæta/ skoða þá:
+
+hii.besties[1].aldur;
+39
+--------------------------------------------------------------------------------------------------------------------
+--------------for-loop------------
+
+for (let i = 10; i < 100; i++) {console.log(i)}
+
+lesist: UM LEIÐ OG I HÆTTIR AÐ VERA MINNA EN 100, STOPPAÐU LOOPUNUA
+
+
+
+-------UM LEIÐ OG X HÆTTIR AÐ VERA...-----------
+
+
+
+for (let bb = 50; bb >= 40; bb--) {console.log(bb)}
+----hér er for loopan frá 50 niður að 40.
+lesist: um leið og bb HÆTTIR að vera meira en 40, stoppaðu þá loopuna.
+
+
+for (let bb = 40; bb <= 60; bb--) {console.log(bb)}
+----hér stoppar loopan ekki!! bb er alltaf undir 60!, varast á þessu
+
+
+for (let ok = 1; ok <= 10; ok * 2) {console.log(ok)}
+----hér stoppar loopan ekki! ok updateast aldrei og heldur áfram að margfaldast
+
+
+for (let re = 1; re <= 10; re *= 2) {console.log(re)}
+----þetta er valid loopa þar sem *= er re = re * 2, sem þýðir að re updateast og mun stoppa í 10
+lesist: um leið og re HÆTTIR að vera minna en eða jafnt og 10, stoppaðu loopuna.
+
+
+
+----while loop------
+
+
+
+let x = 100;
+
+while (x <= 300) {
+console.log(x);
+x+=5;
+}
+
+=100-305
+
+
+
+
+let good = 200;
+while (good <= 300) {
+good++
+}
+
+console.log(good);
+
+=301
+
+
+
+let jo = 100;
+while (jo <= 150) {
+console.log(jo)
+jo++
+}
+
+=100-150
+
+
+
+sjá hvað það breytir miklu hvar console.logið er staðsett
+
+
+
+let psw = "abc123"
+let giska = prompt("sláðu inn lykilorð")
+while (giska !== psw) {
+giska = prompt("sláðu inn lykilorð")
+}
+
+lykilorða sýnidæmi, þeas haldtu áfram að giska hvað lykilorðið er þangað til að það er rétt.
+hér virkar ekki að hafa for loop
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+í dag er 13. júní 
+ég er að gera test fyrir Dúru mína <3
+
+sduifhaoisjdofij
+
+
+

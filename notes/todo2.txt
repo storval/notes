@@ -1,0 +1,91 @@
+vita að það eru nokkrar leiðir til að búa til schemu, útgáfan sem við gerðum í mongoose module er lengri og meira detailed,
+á meðan þessi er meira straight forward en ekki specific/detailed:
+
+const itemsSchema = {
+  name: String
+};
+
+vs 
+
+const itemsSchema = new mongoose.schema ({
+  name: String
+})
+
+...
+kóðinn so far,, ekkert nýtt nema snirtilegri útgáfa af insertMany og auðvitað itemsSchema..
+
+jshint, mongoose tenging og allt það...
+
+
+const itemsSchema = {
+  name: String
+};
+
+const Item = mongoose.model("Item", itemsSchema); 
+
+const item1 = new Item ({
+  name: "Halló!"
+});
+
+const item2 = new Item ({
+  name: "ýttu á + til að bæta við nýjum hlut."
+});
+
+const item3 = new Item ({
+  name: "<---- til að eyða hlut"
+});
+
+const default_items = [item1, item2, item3];
+
+
+Item.insertMany(default_items, function(err){
+  if (err) {
+  console.log(err);
+  } else {
+  console.log("veii, all gekk vel!");
+  }
+  });
+  
+
+
+
+það er hægt að nota niðurstöðuna úr .find() til að gera eitthvað function, þeas eftir að það hefur fundið x þá er hægt að gera
+function fyrir x:
+
+app.get("/", function(req, res){
+  Item.find({}, function(err, foundItems){
+    res.render("list", {listTitle:"Í dag", newListItems:foundItems});
+  });
+
+});
+
+
+ooog síðan inní list.ejs er:
+
+  <div class="box">
+    <% for (let i=0; i<newListItems.length; i++) { %>
+      <div class="item">
+        <input type="checkbox">
+        <p><%=  newListItems[i].name  %></p>
+      </div>
+      <% } %>
+
+sjá hérna hvernig þetta var áður fyrr (bara newListItems) en er núna með .name, kannski erfiðast að vita hvar .name hefði átt að koma
+
+
+
+344. Adding New Items to our ToDoList Database..
+skoða það vid aftur og aftur, hvernig save(); virkar með EJS og res.redirect, skil en skil ekki fullkomnlega, mikilvægt vid
+
+
+express route paramaters, 
+til að þegar einhver gerir (sem líklega 99% af fólki gerir ekki) / og bætir síðan við eitthvað orð við urlið í von um að það virki
+þá er hægt að captura það með express route param..
+
+við loggum það og skoðum/ notum það síðan með:
+
+app.get("/:ordEftirUrli", function(req, res){console.log(req.params.ordEftirUrli)});
+
+
+finna vid á yt með betri mongoose skýringu, custom urlið er extreme óskýrt
+þeas horfa aftur á þetta tutorial eftir að ég er með betra grasp á öllum þessum conseptum, taka því rólega, taka inn, læra, lifa

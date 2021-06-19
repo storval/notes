@@ -1,0 +1,227 @@
+að skrifa jquery á undan kóða er það sama og skrifa $
+
+jquery virkar svipað eins og bootstrap í uppsetningu, að pastea link sem downloadast
+oftast er fólk samt með jquery útaf því hversu vinsælt það er, svona tenging heiti CDN
+
+https://developers.google.com/speed/libraries#jquery
+--þetta er vefsíðan
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+---þetta er það sem fer í script neðst í body í html
+
+og alveg eins og með CSS og JavaScript að hvar maður setur linkinn niður er mjööög mikilvægt
+---jquery er staðsett beint fyrir ofan JavaScript linkinn.
+
+
+callback functions eru sniðug!!
+
+
+ef maður setur jquery kóðann í callback function og .ready þá bíður hann og sér þegar það er búið að loada
+JQuery, þá má executa kóðann:
+
+
+$(document).ready (function () {
+
+$("h1").css("color", "green");
+)}
+
+
+taka vel eftir hérna hvernig function er í opnum sviga sem nær utan um allt, skoða vel syntax á callback.
+
+-- vita líka að þetta er bara uppá safety, þar sem það er venjulega sett JS og Jquery neðst í body, sem
+kemur í veg fyrir að þetta loadist eitthvað skringilega, en gott að vita! callback function!
+
+
+og já:
+
+til að breyta um lit eða einhverju þá er hægt að nota þessa aðferð í staðinn fyrir querySelector..
+
+
+
+$("h1").css("color", "purple");
+
+ég er að velja h1, sem er css, ég ætla að breyta litnum, liturinn verður fjólublár
+
+vita að það getur verið gott að minifya langa runu af kóða til að kóðinn sé færri skrá og loadist þannig upp fyrr fyrir fólk með lélegt net
+
+
+
+ALLT QUERY SELECTOR DÆMIÐ MÁ SKIPTA ÚT FYRIRI $ MEÐ JQUERY ! ! !
+
+no	document.querySelectorAll("h1")
+yes	$("h1")
+
+ef það eru tvö class í css sem heita .lolo og .mimi þá er hægt að bæta þeim báðum við ákveðið element með JQ
+
+$("h1").addClass("lolo mimi")
+
+vita samt líka að ef þetta tengist ekki functioni að gera bæta classunum frekar við í html
+<h1 class="lolo mimi">jambo</h1>
+
+það er hægt að sjá (og örugglega breyta) hvaða class eitthvað er með og fá til baka boolean:
+$("h1").hasClass("lolo")
+=true
+
+hvernig á að breyta texta með jquery?:
+$("button").text("ekki ýta!");
+
+núna er líka hægt að bæta inn html elementum án þess að nota innerHTML:
+$("button).html("<i>pizza</i>")
+
+-----taka vel eftir syntax hérna, hvernig allt er innan um ""
+
+
+
+JQuery er holy
+
+
+
+----með engu JQuery
+
+for (let i = 0; i < 5; i++) {
+   document.querySelectorAll("button")[i].addEventListener("click", function () {
+	document.querySelector("h1").style.color = "purple";
+});
+}
+
+(long ass leiðinlegur kóði)
+
+
+
+----með JQuery
+
+$("button").click(function () {
+   $("h1").css("color", "purple");
+});
+
+
+skoða samt VEL syntax hérna, eftir click þá er allt innan um sviga utan um function.
+
+
+
+til að velja ákveðið class og breyta því með jquery:
+
+$(".boi").css("color", "green");
+$(".pboi").css("font-size", "50px");
+
+hér er ég bæði að breyta color property sem var annar litur og bæta við font-size sem var ekki áður í css-inu
+
+muna að nota keydown í staðinn fyrir keypress.
+
+
+
+--kóði til að detecta hvaða key er ýtt á inní input textaboxi
+
+$("input").keydown(function(evt){
+console.log(evt.key);
+});
+
+----virkar líka á allt documentið, en þá er ekkert ""
+
+$(document).keydown(function(evt){
+console.log(evt.key);
+});
+
+
+ef maður vill sjá á hvaða stafi maður er að ýta á þá er hægt að nota aðferðina fyrir ofan nema í staðinn fyrir
+að console.logga að breyta þá frekar með .text aðferðinni
+
+$("input").keydown(function(evt){
+$("h1").text(evt.key);
+});
+
+
+bæði click og keydown eru events,
+sniðug leið til að velja event er að nota .on
+
+
+$(".pboi").on("click", function () {
+    $(".pboi").css("color", "blue");
+});
+
+
+það er hægt að bæta við og taka út element með JQuery:
+
+$("h1").before("<button>fresh takki</button>");
+--hérna er ég að setja takka Á UNDAN "h1".
+
+hér er hægt að nota 4 mismunandi leiðir til að bæta inn nýju html elementi:
+
+-before
+-after
+-append
+-prepend
+
+prepend setur nýja elementið fremst INNÍ elementið sem við völdum, td;
+
+
+$("h1").prepend("<button>fresh takki</button>");
+
+<h1 class="lolo mimi"><button>fresh takki</button>Alt</h1>
+
+
+append gerir það sama nema aftast INNÍ elementið sem við völdum, td:
+
+
+$("h2").append("<button>fresh takki</button>");
+
+<h2><button>fresh takki</button>jambo</h2>
+
+
+oooooog síðan til að eyða elementi, easy peasy..
+
+$("h2").remove();
+
+
+
+líka til show og hide aðferð sem er með function:
+
+$("button").on("click", function () {
+$("h1")hide();
+}
+
+þegar ég ýti á BUTTON með CLICK, þá fer af stað FUNCTION sem fær H1 til að HIDEa
+alveg eins með show, nema bara sýna eh sem er falið í staðinn fyrir að fela eh.
+
+þetta skiptir fram og til baka mjög fljótt, fyrir meira smooth og aðeins lengri tíma er hægt
+að skrifa fadeout í staðinn fyrir hide
+
+betra samt að nota fadeToggle, fer fram og til baka í fadeIn og fadeOut
+
+
+$("button").on("click" function () {
+   $(".ehclass").fadeToggle();
+}
+
+
+líka hægt að nota slideDown, slideUp, og slideToggle, sem gerir svipað og fade nema það felur element með því að slide-a up og slidea niður
+MJÖG SNIÐUGT FYRIR DROP DOWN MENU TD!
+
+
+L Í K A, hægt að nota .animate
+----þetta býr til mögueliekann á að setja hvað gerist með CSS reglur ! !
+
+$(".ggbtn").on("click", function () {
+    $(".gg").animate({opacity: 0.5});
+});
+
+NOTE !!!--- með animate regluna að það er aðeins hægt að breyta í eitthvað sem er skilgreint með tölum,
+en ekki hægt að breyta um svona td:
+color: white eða color: rgb(64, 64, 77) 
+
+
+vita líka að það er hægt að tengja saman marga viðburði með punkt á milli:
+
+$("button").on("click", function () {
+   $(".hehe").slideUp().slideDown().animate({opacity: 0.2});
+}
+
+-----------------------------------------------------------------------------------------------------
+simon game
+------------
+
+
+
+
+
+

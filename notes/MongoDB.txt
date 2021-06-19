@@ -1,0 +1,142 @@
+C:\Program Files\MongoDB\Server\4.4\data\
+
+savea þetta location sem birtist í installation
+
+fara ´´i (C:) C drive
+
+búa til möppu sem heitir data, inní henni búa til möppu sem heitir db
+
+búa til file með bash sem heitir '.bash_profile'
+
+fara inná þessa síðu og paste
+https://medium.com/@LondonAppBrewery/how-to-download-install-mongodb-on-windows-4ee4b3493514
+
+alias mongod="/c/Program\ files/MongoDB/Server/4.0/bin/mongod.exe"
+alias mongo="/c/Program\ Files/MongoDB/Server/4.0/bin/mongo.exe"
+
+pastea þetta inní vim editor, ýta fyrst á 'i' til að fara í edit mode
+
+edita system variables og setja inn new path (ekki breyta bara bæta við þessu: C:\Program Files\MongoDB\Server\4.4\bin)
+
+
+
+núna er að læra CRUD í mongo!
+create - read - update - delete
+
+fyrst er slegið inn 'mongod' í bash
+
+síðan er það að opna nýjan glugga með alt + f2 eða hægri smella og new
+
+inní nýja bash glugganum er slegið inn 'mongo'
+help fyrir hjálp
+show dbs sýnir hversu mikið pláss maður er búinn að taka með mongodb
+með show dbs koma upp þrír databases/gagnagrunnar, admnin, config, local
+
+til að byrja að nota nýjan database er gert:
+use blablaDB
+
+til að vita í hvaða database maður er í (soldið eins og með github) þá er gert:
+db
+
+-búa til nýtt db (use nafnDB) (þarf held ég að enda á DB, could be wrong)
+-db (til að sjá hvort maður sé ekki örugglega í rétta database)
+-db.eitthvad.insertOne ({nafn: "james, aldur: 20}) ýta svo á enter
+--núna ætti að koma upp {acknowledged ....}
+-show collection (til að sjá hvaða nafn 'eitthvad' sé og líka til að double checka að við bjuggum til eitthvad)
+
+show collection - sýnir allt það sem við höfum bætt inn í current database (nafnDB)
+
+
+það þarf að vera suupeer precise með mongo syntax
+
+
+til að búa til database með smá upplýsingum:
+
+db.eitthvadDB.insertOne({city: "Reykjavík", age: 24,})
+
+
+til að lesa/skoða/read upplýs það sem hefur verið sett inní mongo database þá er:
+
+.find()
+
+db.nafnid_á_DBinu.find()
+
+
+hér er auðvelt að ruglast á hvað 'use DB xxxx' nafnið á því DB er á móti hvað er búið til inní því
+---munurinn á eins og möppu og skrá inní möppu, og inní 'möppunni' þá er gert show collection, þar er fundið hvaða 'skrár' eru þar
+------núna er þá hægt að sjá hvað skráin heitir og gera:
+----db.nafnið_á_skránni.find()
+--núna birtist allar þær upplýs sem voru skráðar inní skránni, sem var búin til inní möppunni :)
+
+-----vita að undir docs fyrir mongo í find() þar eru upplýsingar til að skoða hvernig á að leita með paramaters og specific
+
+
+hún notar þessa aðferð til að updatea:
+(hún notaði _id til að merka allt sem fór inní skránna áður en þetta er gert)
+
+db.products.updateOne({_id: 1}, {$et: {stock: 32}})
+
+af hlutunum sem er inní skránni products, velja það sem hefur _id : 1 og bæta við stock sem hefur value af 32
+
+
+
+eða eins og ég gerði hjá mér:
+
+db.holy.insertOne({_id: 1, hus: "nyja", mus: "gamla"})
+
+db.holy.updateOne({_id: 1}, {$set: {road: 60}})
+
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+
+ooog núna er holy sem er með _id:1 svona:
+{ "_id" : 1, "hus" : "nyja", "mus" : "gamla", "road" : 60 }
+
+
+
+til að eyða:
+
+db.holy.deleteOne({_id: 1})
+
+
+í vidinu relationships in mongoDB, talar hún um hvernig það er hægt að embedda eins og review og fleiri hluti,
+sem hún skrifar fyrst í text editor og copy pastear svo yfir, ekkert key, bara vita
+
+
+
+
+allt þetta er mongoDB "IN I'TS PUREST FORM",
+semsagt, gott að vita en eitthvað sem er ekki everyday practical eins og með þannig dæmi
+
+
+
+
+núna er það bara að setja saman node.js og mongo..
+
+vinsælt að nota mongoose til að auðvelda kóðann og nota frekar an native mongoDB driver (gott að vita en ekki practical)
+
+
+ef að það kemur error í bash með mongoDB þá er mögulega þarft að terminata serverinn með þessu:
+sudo pkill -f mongod
+--opna hann síðan bara aftur (mongod í einum glugga og mongo í öðrum)
+
+
+
+
+-----------------------------------------------------------------------------
+mongoose module
+
+object document mapper,
+
+
+1. búa til möppu
+2. touch app.js
+3. npm init
+4. npm i mongodb
+5. npm i mongoose
+
+
+
+
+þetta mongoose module er poopy, skoða betur á yt
+
+.... ég meinaa, fara aftur yfir mongoose partinn, taka deep dive, anda á milli, eitt skref í einu, þú getur þetta <3

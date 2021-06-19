@@ -1,0 +1,215 @@
+mikilvægt!!
+
+þegar maður downloadar eða clonear project frá github/appbrewery/ hvar sem er,, þá er node module gitignorað! sem þýðir að:
+
+-npm i
+
+til þess að ná í node,
+margir eru búnir að gera ákveðis setting fyrir node sem tengist sjálkrafa en mikilvægt að 'npm i'
+
+
+
+--challange, fá home.ejs til þess að loada upp inní home route 'localhost:3000'
+
+app.get ---------------------------------búa til route eða 'hvaða route ertu að targeta...?'
+
+app.get("/", function (req, res){--------búa til 'home' eða '/' eða localhost:3000 eða 'root route'
+})
+
+app.get("/", function (req, res){--------hvað á að rendera þegar heima-síðan opnast og hvernig?
+res.render("home");
+}) 
+
+vita líka að það eru aðeins þær skrár inní 'views' og sem eru EJS sem er hægt að res.rendera
+
+!! muna !!
+res.render("nafnÁSkrá.ejs", {nafnÁVarInníEjs: nafnÁVarInníAppjs})
+það þarf ekki að 'búa til var' inní .ejs skránni til að geta notað það
+
+
+
+semsagt..
+
+app.get("/", function(req, res){
+res.render("home", {blogOne:homeStartingContent});
+});
+
+blogOne --nafnið á 'ejs varinu' sem MUNA þarf ekki að declarea, <%= blogOne %> 
+og síðan er paragraph texti með const sem heitir homeStartingContent... 
+--hægt að hafa <p> utan um líka, like soo: 
+<p> <%= blogOne %> </p>
+
+{key:value pair}
+
+
+einhver að henda bootstrap í ruslið núúnaaaa... ughhyyyy
+frameworks bad og good
+
+Það getur verið sniðugt að búa til möppu inní 'views' sem heitir 'partials' sem eru þá kóðarnir sem eru partial/ brot af einhverju..
+---kallað fram með layouts með ejs.........venjulega er það:
+
+<%-include("header")-%
+
+en ef það er inní partials möppunni sem er inní views þá er það easy líka:
+
+<%-include("partials/header")-%>
+
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+<form method="post">
+    <input action="/compose" type="text" name="com">
+    <button type="submit">blogga!</button>
+</form>
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+þessi er holy,
+sjá hvernig allt er, hvert actionið fer, method post
+að ipnuttið sé text, bannað að gleyma að nefna inputið
+sjá að inputtið fær nafn en ekki takkinn sjálfur,
+vita að hann er inní form,
+sjá að input er fyrir ofan button sem er bæði inní form, þekkja þessa formúlu.
+
+
+til að taka á móti þessu sem er skrifað inní form/input/button, er app.post, tómt let inní app.js/server og nýtt ejs tag inní home.ejs
+
+
+1. inní app.js
+app.get("/compose", function(req, res){
+  res.render("compose");
+});
+
+
+2. ofarlega inní app.js
+let posty = "";
+
+
+3. inní compose.ejs
+<form method="post">
+    <input action="/compose" type="text" name="com">  
+    <button type="submit">blogga!</button>
+</form>
+
+
+4. inní app.js
+app.post("/compose", function(req, res){posty=(req.body.com)});
+
+
+5. inní home.ejs
+<%= comPo %>
+
+
+6. inní app.js
+app.get("/", function(req, res){
+  res.render("home", {blogOne: homeStartingContent, comPo: posty});
+});
+
+
+----textarea má ekki hafa nafn sem inniheldur tölu án þess að breyta outputtinu í eitthvað r/n
+
+með tölu í name:   { posty: 'doo', posty2: 'voo\r\n' }
+ án tölu í name:   { posty: 'doo', posty2: 'voo' }
+
+<textarea cols="30" rows="10" action="/compose" type="text" name="com2"></textarea>
+<textarea cols="30" rows="10" action="/compose" type="text" name="como"></textarea>
+
+
+
+hana langar alltíeinu að kynna nýja alternative aðferð við for loops, sem er for each..
+en okkiiii svona lítur það roughy út (vita líka að það eru tveir hlutir, titill og texti, annars væri þetta öðruvísi)
+---margir velja forEach í staðinn fyrir for loop, skoða betur
+
+
+mest tricky við þetta var að skilja þetta:
+
+
+app.post("/compose", function(req, res){
+
+
+
+...inní app.js....
+
+  let post = {
+    title: req.body.com,
+    content: req.body.como  
+  };
+  posts.push(post);
+  res.redirect("/");
+});
+
+
+....inní home.ejs......
+
+<% posts.forEach(function(post){ %>
+
+    <h1><%=post.title %></h1>
+    <p><%=post.content%></p>
+    <% }); %>
+
+
+.....inní compose.ejs......
+
+<form method="post">
+    <label>Titill</label>
+    <input action="/compose" type="text" name="com">  
+    <br>
+    <label>Texti</label>
+    <textarea cols="30" rows="10" action="/compose" type="text" name="como"></textarea>
+    <button type="submit">blogga!</button>
+</form>
+
+
+því post er (held ég, skoða) js object sem hefur title sem heldur utan um outputtið frá compose.ejs sem heitir com og com2
+lettið er skipt í title og content þessvegna er það smá ruglandi, þeas ekki let á undan title og content heldur bara post
+
+sjá síðan hvar .title og .content er notað <%=post.title%> og <%=post.content%>
+
+var að fatta að í einu skrefi þá kommentaði ég út varin fyrir bæði req.body.com og com2, þessvegna var þetta confusing
+
+
+
+
+/*má skoða seinna meir/ gott að vita þegar það kemur að því*/
+
+seinna meiiir verður gott að skilja req.params eða routing inní express,
+þá þarf ekki að gera síðu fyrir hvert einasta /síða/undirtitill, kóðinn lítur svona út:
+
+
+app.get("/posts/:goo", function(req, res){
+  console.log(req.params.goo);
+});
+
+// res.send(req.params)
+
+síðan er hægt að nota sem er kallað kebab casing, til að geyma upplýs um mismunandi enda á urli
+
+
+Lodash-
+utility library fyrir javascript sem gerir það auðvelt að nota js með express
+svo að þegar það client/notandi er á síðunni og skrifa eitthvað eins og
+
+goo.is/myndir/Ur_ferdalaginu
+
+til að komast á stað á síðunni sem er nákvæmlega skrifað svona:
+
+goo.is/myndir/ur_ferdalaginu
+
+að með Lodash þá tekur það á móti mismunandi inputtum sem notandi gæti hafa skrifað til að gera endann á urlinu og
+outputtar mjög clean og alltaf það sama, 
+semsagt, notandinn má gera uppercase og - eða _ en það skiptir ekki máli (ef maður notar lowercase aðferðina hjá Lodash)
+----eeeenn, fólk er að tala um að það hafi verið practical fyrir nokkrum árum að nota Lodash fyrir hluti sem eru frekar basic NÚNA
+-------í JS, þeas, gæti verið sniðugt að tékka, annars er alltaf hægt að nota toLowerCase osfrv, (skoða)
+
+----í stuttu máli, allt með Lodash, kebabCasing og req.params er allt sem gæti verið sniðugt en þarfnast athugunar
+
+xxxxxx.. til að t.d þegar maður býr til nýjan post, að titillinn á póstinum sé automatically með sinn eigin link og sína eigin sub-síðu
+
+
+
+truncate a string:
+breytir stórum texta í lítinn texta með '...' í lokinn, vid 315
+
+
+

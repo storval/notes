@@ -1,0 +1,5 @@
+            <button class="collapsible">xxx</button>
+            <div class="content">
+                <p><object class="scrollbox" data="notes/xxx.txt"
+                        type="text/plain"></object></p>
+            </div>

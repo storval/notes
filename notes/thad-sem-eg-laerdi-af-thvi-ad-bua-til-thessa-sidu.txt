@@ -1,0 +1,33 @@
+það er hægt að nota <pre></pre> til að halda spacing
+
+
+fokin test
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum vel turpis lorem. 
+Nullam auctor lectus ut metus volutpat, non pretium massa bibendum. Ut laoreet lectus in pretium tempor.
+ Etiam mollis luctus lectus et fringilla. Duis quis sapien tincidunt, euismod ante ut, dictum lorem. Curabitur
+ non gravida sem. Aenean feugiat dui dolor, ut mollis tellus feugiat ut. Aenean luctus lorem a libero tempor, nec 
+lobortis orci dignissim. Pellentesque nec pulvinar ligula. Pellentesque pharetra consequat nisi. Sed magna lacus, 
+posuere ut dignissim ut, tristique vel purus. Phasellus accumsan ultrices ullamcorper. Nam vel odio non turpis sollicitudin 
+gravida. Sed lectus quam, bibendum eu convallis aliquet, tristique sed leo. Nullam eget est id nunc efficitur vulputate nec 
+a risus. Nullam et sapien enim.
+
+Phasellus dapibus sapien ac augue auctor molestie. Mauris condimentum, ante in mollis malesuada, nunc nulla gravida massa, ut 
+faucibus arcu libero sed nisl. Donec tristique odio ultricies velit elementum consequat. Aenean in nulla pretium, suscipit nisi
+ at, hendrerit dolor. Fusce tincidunt id diam ut pellentesque. In sit amet mauris eu eros ullamcorper tempor. Ut vel elementum leo. 
+Curabitur non ipsum ligula. Donec nec justo nec nunc facilisis dictum ac ac dolor. Aenean commodo felis a ultricies gravida. 
+Sed velit augue, tincidunt vitae viverra eget, dapibus ac eros. Ut vel diam ante. In augue est, sodales venenatis lorem et,
+ blandit commodo ipsum. Donec vehicula volutpat imperdiet.
+
+Donec malesuada nec lectus id commodo. Nam neque urna, iaculis commodo rhoncus a, fermentum non enim. Duis 
+ac aliquam augue. Quisque bibendum orci a mi maximus, a fringilla arcu bibendum. Vivamus hendrerit facilisis
+ purus id rutrum. Nulla pharetra lacus eu ligula aliquam, ac maximus lorem pretium. Nam eget tincidunt lectus,
+ at ornare tortor. Fusce commodo nisi vel est suscipit lobortis. Curabitur facilisis lacus nec semper fermentum.
+ Nulla at ex a augue eleifend pretium.
+
+Donec vestibulum interdum mollis. Fusce tellus libero, finibus pulvinar iaculis ac, 
+placerat non mauris. Donec suscipit elit sit amet auctor dapibus. Integer porttitor sollicitudin felis.
+ Nam mollis diam vel pharetra pulvinar. In sit amet interdum arcu, non sodales ligula. Sed ultricies dui
+ neque, ut imperdiet massa pellentesque vel. Ut gravida eros metus, sit amet porta eros commodo malesuada. 
+Vestibulum odio diam, gravida ac erat et, auctor imperdiet eros. Pellentesque in risus a ante ultricies pulvinar 
+a ac ipsum. Fusce laoreet venenatis hendrerit. Etiam non neque ullamcorper, ullamcorper nisi sed, sodales augue.
+	 Maecenas eu enim viverra, gravida tortor vel, consectetur erat. Maecenas mattis mi blandit tortor auctor ultricies.

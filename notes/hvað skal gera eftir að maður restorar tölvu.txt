@@ -1,0 +1,10 @@
+ná í gitbash
+ná í vscode
+ná í node.js
+breyta path variable yfir í vscode https://stackoverflow.com/questions/46638944/code-is-not-recognized-as-an-internal-or-external-command
+ná í nodemon
+
+--all good
+
+
+ekki gleyma að exporta chrome bookmarks áður en það er restoreað tölvu!!

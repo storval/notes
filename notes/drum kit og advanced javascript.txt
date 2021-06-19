@@ -1,0 +1,147 @@
+
+
+document.querySelector("button").addEventListener("click", handleClick);
+
+function handleClick() {
+	alert("I got clicked")
+}
+
+hvað er event listener?
+--function sem "hlustar" eftir einhverju sem notandinn á síðunni gæti verið að gera, hreyfa músina, clicka, setja fullscreen.etc
+--við látum einhvern "bíða" eftir að við gerum eitthvað, bíddu eftir að þetta gerist og gerðu síðan þetta þegar það gerist.
+
+"passing a function as an input so it can be called at a later time."
+---hér talar hún um hvernig í kóðanum fyrir ofan að handleClick er ekki með (), á meðan við specifium addEventListener..
+
+anonymous function er function þar sem það er sleppt því að skýra functinoið. sem væri þá:
+
+
+document.querySelector("button").addEventListener("click", function() {alert("I got clicked")});
+
+
+
+--------------------------------hérna er kóðinn til að eventListena á allar trommurnar-----------------------------
+
+var numberOfDrumButtons = document.querySelectorAll(".drum").length; //hversu margar trommur eru á síðunni?
+
+for (var i = 0; i<numberOfDrumButtons; i++) { // á meðan i er minna en fjöldinn á trommunum, bættu þá einum við i
+
+    document.querySelectorAll(".drum")[i].addEventListener("click", function () {
+        alert("I got clicked");
+    });
+
+}
+
+
+$0
+It's the last selected DOM node index.
+sem þýðir að þetta er það sem displayast fyrir allt það sem er klikkað á vefsíðu, ($0 fyrir það sem þú klikkaðir seinast á)
+$1 fyrir næstseinasta sem þú klikkaðir á
+$2 fyrir næstnæstseinasta sem þú klikkaðir á ofsrv.
+
+hér má búa til reglu í javascript.
+
+
+
+debugger; er sniðugt til að debugga í chrome, skoða betur á w3 eða mdn
+
+
+í vid 163. þá talar hún um einfalda reiknivél, en fólk benti á að það væri sniðugari leið að gera það með spread operator
+sem hún mun fara yfir seinna, svoo tékka frekar betur á því og skoða hvað spreap op er. oog hvernig arrow function virkar
+
+Higher Order Functions: nota functions sem input inní öðrum functions
+
+
+----til að spila ákveðið hljóð með JavaScript(þetta er inní eventListener,) þegar það er ýtt á x núna þá kemur hljóð----
+
+var audio = new Audio('sounds/tom-1.mp3');
+        audio.play();
+
+
+
+"this" sýnir hvaða takka var ýtt á sem "click"
+(this) er datatype inní javascript
+
+
+
+
+
+---svona lítur javaScript object út.----------(HOLY!)--------------------------------
+---basically variables sem eru inní variable án þess að þurfa að nota var aftur-----
+
+var kall = {
+    nafn: "James",
+    aldur: 20,
+    haed: "150cm",
+}
+
+kall;
+--> {nafn: "james", aldur: 20, haed: "150cm"}
+
+console.log(kall.aldur)
+--> 20
+
+
+ef við erum með marga kalla, þá gæti verið best að gera constructor function.
+PASSA HÉRNA AÐ FYRSTI STAFURINN Í CONSTRUCTOR FUNCTION ÞARF AÐ VERA MEÐ STÓRUM STAF
+
+function Kall (nafn, aldur, haed) {
+
+this.nafn = nafn;
+this.aldur = aldur:
+this.haed = haed:
+}
+
+
+núna er hægt að ger:
+
+var kall1 = new Kall("James", 20, "140cm");
+
+muna að fyrir constructor function að það er alltaf Stór Stafur fyrir nafnið á function ooog líka m kallar það með "new"
+
+MUNA LÍKA!! hér á að vera hægt að nota ES6 classes frekar en constructor function, meira sweet og skipulagðra SKOÐA!
+
+
+
+
+
+    var btnInnerHTML = this.innerHTML;
+
+        switch (btnInnerHTML) {
+            case "w":
+                var audio = new Audio('sounds/kick.mp3');
+                audio.play();
+                break;
+
+
+
+-------------kóðinn fyrir switch, sem virkar svipað eins og if statement, renna aftur í gegnum vid 167.----------------
+---tekur ekki inn keybord input, samsvarar aðeins þeim sem hafa string "w" eða "a" inní htmlinu.
+---plís skoða betur líka (in future) objects, their methods.. (vid 168)
+
+
+
+
+
+--------------------------------------------------------HHOOOLLLLYYYY-----------------------------------------
+
+document.addEventListener("keydown", function() {
+    alert("key was pressed!")
+})
+
+
+--event listener á allt documentið sem respondar um leið og það er ýtt á einhvern takka!!!!!
+
+document.addEventListener("keydown", function(event) {
+    console.log(event)
+})
+---hér kemur fram á hvaða takka það var ýtt á í console.log
+
+event gefur mikið af upplýsingum um nákvæmlega hvernig eitthvað gerðist.
+event getur heitið hvað sem er!!!+
+
+
+callbacks í JavaScript mjög mikilvægt, skoða betur og verður nefnt aftur, vid 171, sp um að skoða meiri info um JS soon..
+
+---núna er ég að byrja á 2 klst og 45 min vid með colt steele um JS for beginners svo ég get skilið conseptin betur
+og komið síðan aftur með betri getu.

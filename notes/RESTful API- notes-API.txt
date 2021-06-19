@@ -1,0 +1,357 @@
+RESTful API
+
+REST- REpresentational State Transfer
+
+API - application protocol interface
+
+HTTP - hypertext transfer protocol
+
+HTTPS - öruggt / Secure HTTP
+
+FTP - file transfer protocol
+
+rétta tungumálið notað sem client að requesta eitthvað frá servernum, hvaða request erum við að gera og hvað hefur serverinn uppá að bjóða
+
+
+að búa til sitt eigið RESTful API er soldið einsog setja línurnar(menu) á hvað serverinn getur boðið uppá fyrir clientinn
+REST er semsagt architectural style til að búa til sitt eigið API, þeas ákveðin leið með ákveðnum hlutum, 
+(margar leiðir til að búa til API), td:
+
+SOAP - GraðhQL -Falcor - ofl...
+
+REST er gold standard núna
+
+
+REST - búið til af Roy Thomas Fielding, þar sem hann propasaði að það ættu að vera nokkrir standard hlutir sem væru til staðar
+fyrir API að vera búið til, groundwork og basics. Þannig að mikið af reglum og fyrirsettum hlutum en mjög góðir (apparently)
+tvær mikilvægustu reglurnar fyrir API að vera RESTful er:
+
+-use HTTP request verbs, (get, post, put, patch, delete)
+-use specific patterns of routes/endpoint URLs ()
+
+vita að þessi fimm HTTP request verbs eru eins og CRUD í mongo og á server:
+
+
+HTTP	  - mongoose/einhverskonar database
+
+post      - create
+get       - read
+put/patch - update
+delete    - delete
+
+
+put   - skiptir út hlut fyrir betri hlut
+patch - bætir hlutinn en skiptir honum ekki út
+
+
+robomongo/ robo 3T er graphical user interface sem er oft notað með mongoDB til
+
+þegar maður opnar robo3T, gæti maður þurft að runna mongod inní bash á undan svo það tengist,
+
+
+fyrir visual recap á hvað er í gangi með RESTful API að ducka 'restful api table example' til að sjá hver umgjörðin og skilyrðin eru
+
+
+
+MUNA OG ALDREI GLEYMA, ef það er eitthvað að með mongoose þá hefur það eitthvað að gera með stóran og lítinn staf :(
+
+forrit sem heitir Postman leyfir manni að ákveða hvað gerist þegar client býr til post request
+án þess að við þurfum að vera búin að búa til vefsíðu (þá myndum við búa til form, submit, action: POST ...)
+
+
+smá ves að nota POST request frá postman, í tutorialinu notar hún body-parser og req.body.nafn_á_params_frá_mongoose_schemu
+, finna út hvernig það er hægt að komast hjá því að nota (deprecataðann) body parser með body x-form-urlencoden (inní postman)
+
+
+af einhverri ástæðu er bæði 'Baby' og 'Notur' collectionin með stórum staf, þannig að (mongoose thing) ekki ruglast á notur og Notur
+
+það er hægt að búa til callback function inní .save() til að logga err ofl
+
+
+ekki gleyma að allt sem var gert í gegnum Postman núna er hægt að gera eftir að maður er búinn að búa til form, með POST og sumbit
+
+
+...
+"If you are using VS Code IDE, you can install REST Client extension for testing your API request instead of Postman. 
+you will not need to go out of your code."
+--eh komment á tutorialið (368)
+
+
+
+
+
+að eyða (DELETE) í express er svipað eins og app.get eða .post:
+
+app.delete("/route", function(req, res){})
+
+
+app.delete("/notur", function(req, res){
+    Notur.deleteMany(function(err){
+        if(!err){
+        res.send("allt er farið!");
+        } else {
+        res.send(err);
+        }
+    });
+});
+
+
+núna er hægt að nota Postman til að senda DELETE request (HTTP request) á localhost:3000/notur
+
+sjá documentationið yfir route methods (app.route) fyrir express, hægt að stytta hvernig app.post() og .get og allt það er skrifað
+OHmyyyyyyyyyyyy, skooo
+greinilega til super auðveldari leið og gera .post .get. delete etc fyrir sama routeið, þessi aðferð notar chained method,
+þeas þetta er notað ef maður er að búa til get og post og/eða fleiri fyrir sama ("/route"):
+
+
+app.route('/book')
+  .get(function (req, res) {
+    res.send('Get a random book')
+  })
+  .post(function (req, res) {
+    res.send('Add a book')
+  })
+  .put(function (req, res) {
+    res.send('Update the book')
+  })
+
+--úr docs hjá express
+
+
+
+
+
+FRÁ ÞESSU:
+
+app.get("/notur", function(req, res){
+    Notur.find(function(err, foundNotur){
+        if(!err){
+            res.send(foundNotur);
+        } else {
+            res.send(err);
+        }
+        
+    });
+});
+
+app.delete("/notur", function(req, res){
+    Notur.deleteMany(function(err){
+        if(!err){
+        res.send("allt er farið!");
+        } else {
+        res.send(err);
+        }
+    });
+});
+
+app.post("/notur", function(req, res){
+
+  
+    const babyNotur = new Notur ({
+        nafni: req.body.nafni,
+        dagsetningi: req.body.dagsetningi
+    });
+    babyNotur.save(function(err){
+        if(!err){
+            res.send("veiiii goody");
+        } else {
+            res.send(err);
+        }
+    });
+
+});
+
+
+
+
+YFIR Í ÞETTA:
+
+
+
+
+
+
+app.route("/notur")
+
+.get(function(req, res){
+    Notur.find(function(err, foundNotur){
+        if(!err){
+            res.send(foundNotur);
+        } else {
+            res.send(err);
+        }
+        
+    });
+})
+
+.post(function(req, res){
+
+  
+    const babyNotur = new Notur ({
+        nafni: req.body.nafni,
+        dagsetningi: req.body.dagsetningi
+    });
+    babyNotur.save(function(err){
+        if(!err){
+            res.send("veiiii goody");
+        } else {
+            res.send(err);
+        }
+    });
+
+})
+
+.delete(function(req, res){
+    Notur.deleteMany(function(err){
+        if(!err){
+        res.send("allt er farið!");
+        } else {
+        res.send(err);
+        }
+    });
+});
+
+
+
+smá áminning fyrir hvernig á að captura eitthvað input td. titill á bloggfærslu sem endirinn á urli:
+
+app.route("/notur/:titillNotu")
+
+.get(function(req, res){
+Notur.findOne({title: req.params.titillNotu}, function(err, fundinnNota){
+    if(fundinnNota){
+        res.send(fundinnNota);
+    } else {
+        res.send("ekkert fannst");
+    }
+});
+});
+
+hér erum við að segja, hvað sem var sett sem 'title' hefur sitt eigin endi á urli sem er þá hægt að nota og sjá,
+'title' er þá eitt af því sem við settum sem mongoose.shema (title: String)
+
+smá reminder líka að ef titillinn er 'góður bolli' þá kæmi það svona fram í urlinu: /godur%20bolli
+https://www.w3schools.com/html/html_urlencode.asp
+
+
+
+.put, þá er hægt að nota 'update' aðferð í gegnum mongoDB,
+----'update' er deprecated, nota updateOne, eða replaceOne, þar sem þessi partur af (hvað þarf að fylla uppí svo að API sé restful)
+-----er um að basically skipta út documenti fyrir sama document nema nýtt og nýjar upplýsingar
+-------á meðan patch er um að bæta eða laga en halda documentinu því sama
+
+venjulega með update þarf að nota overwrite: true, en það kemur default með replaceOne, gott að vita ef það er eitthvað að down the line
+--þannig að:
+
+app.route("/notur/:titillNotu")
+
+.get (get, function, ...)
+
+.put
+
+
+
+AHHhhhh, passa passa!! þó að það virki að nota body parser og fylgja eftir tutorialinu þá kom samt error (cannot read property of undefined)
+þegar ég gerði .put aðferð í gegnum postman.. um leið og ég setti nýja (sjá fyrir neðan/ boilerplate) að þá virkaði allt.
+
+app.use(express.urlencoded({extended: true}));
+app.use(express.json())
+
+
+vita að .put skiptir documentinu út algjörlega, þannig að ef það er title: og content: í mongoose shcema og við gerum .put nema bara
+með td. title:, þá deletast contentið út, (dæmið með hjólið sem er bilað og þá er fengið nýtt hjól í staðinn fyrir að laga það)
+
+
+.patch
+(dæmið með hjólið sem er bilað og þá er lagað það í staðinn fyrir að kaupa/ fá sent nýtt hjól)
+það er stærsti munurinn á .put og .patch, 
+
+
+
+
+.patch er HTTP method -------á meðan replaceOne er CRUD operation í mongoose
+.put er líka HTTP method ----á meðan ---II----
+
+okii sko áður en það er farið í .patch þá er gott að vita að munurinn á milli þeirra .patch og .put er lítill og að alvöru munurinn
+komi frá mongoose leiðinni að .replacOne og síðan .updateOne, en allt þetta er í grunninn gert til að uppfylla skilyrðin af RESTful API
+
+
+með .patch er hægt að nota aðferðina '$set' (sjá mongoDB $set method í docs)
+þannig að:
+
+
+.patch(function(req, res){
+    bla.updateOne(
+        {$set {nafn: "eitthvað nýtt"}}
+    )
+})
+
+og það er hægt að hafa mörg 'fields' til að updatea, field er í þessu tilfelli 'nafn' og nafn er tekið úr 
+mongoose. shema þar sem það var specifiað
+---vita líka að ef við viljum hafa það meira opið hvað er hægt að update-a að þá er hægt að gera þetta svona:
+
+
+.patch(function(req, res){
+    bla.updateOne(
+        {$set req.body}
+    )
+})
+
+hérna erum við að segja, updateaðu aðeins það sem userinn hefur slegið inn til að updatea, (leitar í gegnum allt með req.body)
+ooog auðvitað er fyrir ofan þetta .patch búið að declare hvaða url/eitthvað þetta er (req.params: og app.route (sjá fyrir ofan))
+
+:((
+get virkar vel en bæði post og patch eyða bara því sem var í staðinn fyrir að replacea(put) eða updatea(patch)
+
+.put(function(req, res){
+    Notur.replaceOne(
+        {title: req.params.titillNotu},
+        {title: req.body.title, content: req.body.content},
+        {overwrite: true},
+        function(err){
+            if(!err){
+            console.log(title);
+            } else {
+                res.send(err);
+            }
+        }
+    );
+})
+
+
+gamli deprecataðu body-parser virkaði fyrir .get og líka eftir að ég notaði nýju útgáfuni app.us(express...)
+---veit ekki endilega hvort að hann sé vandamálið afhv, put. og patch eru ekki að virka...
+
+
+hehehehhe,,,, það var typo lengst til baka í mongoose.schema þar sem ég gerði íslenskt orð í staðinn fyrir title, og þess
+vegna er allt búið að vera smá að virka en samt ekki hehehee, moving on..
+
+
+muna að með ef maður skilur eftir autt fyrir annaðhvort 'title' eða 'content' þegar maður vill updatea og gerir .put að þá mun annaðhvort 
+sem var skilið eftir autt eyðast..
+og ef maður gerir það með patch, þá mun eitt af þessu updateast á meðan hitt verður eftir óbreytt.´
+
+
+
+skoskoskoskosk
+
+það þarf ekki að nota overwrite: true fyrir hvorki .put né .patch og allt virkar vel og holy :)
+
+
+
+
+.delete er HTTP
+.deleteMany og .deleteOne er Mongoose 
+
+---bara ekki gleyma hvað er hvað með allt .methods
+
+
+
+tadaa!
+
+allt komið, núna er 'appið'/API-ið RESTful, hægt að nota Postman til að gera .get, .put, .post, .patch, .delete, á allt og einstakar síður
+vel gert ég !
+--hægt að leika með kóðann og sjá undir möppunni 'notes-API'
+
+:)
+

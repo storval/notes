@@ -1,0 +1,292 @@
+ node runnar á JavaScript og er þessvegna einn af vinsælustu backendunum
+
+nodejs færir javascript úr því að vera browser exclusive yfir í að geta runnað beint á tölvu, eða búið til desktop forrit osfrv
+Atom text edit er td búinn til með JavaScript og NodeJS
+
+þannig að með Node er hægt að fá einhvern server/ eigin tölvu til að runna JS til að búa til og svara requestum án þess að þurfa gera neitt.
+
+það er hægt að runna skrár beint inní bash, með því að skrifa node á undan (td: node index.js)
+
+repl - read, evaluate, print, loop
+hér er hægt að executa smá kóða inní bashinu sjálfu..
+
+til að komast "inní" repl, þá er hægta að skrifa node og ýta á enter
+til að komast útúr repl þá er hægt að skrifa .exit EÐA ýta á ctr+c+c (c tvisvar)
+--- ctr+c er oftast leiðin til að komast útúr svona aðstæðum inní bash
+
+til að hreinsa allt sem var skrifað í consoleinu er einfaldlega skrifa clear
+
+inní index.js er hægt að skrifa const fs = require("fs");
+til þess að fá aðgang að File System, og þá er hægt að gera allskonar 
+(basically til að nota file system feature af NODE þá þarf að skrifa þennan kóða)
+hér er linkur fyrir allt sem er þá hægt https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_file_system 
+
+núna er hægt að copy paste-a td með aðferð sem lítur svona út:
+
+fs.copyFileSync("lala.txt", "lala2.txt")
+aðferð til að copya - hvaða skrá viltu copya - hvað á nýja copyið að heita.
+
+EFTIR ÞETTA ER MIKILVÆGT AÐ EXECUTEA INDEX.JS INNÍ BASH, svo að kóðinn runni
+
+
+NPM - node packages manager
+
+-hér er hægt að finna kóða sem fólk hefur skrifað sem er hægt að runna með node, sem eru einfaldir og reusable
+
+þegar maður installar node, þá kemur það með NPM en sami eins og vöruhús með engum vörum, seinna meir bætist meira og meira í safnið
+til að byrja þá þarf maður að runna hann (held ég) í fyrsta skiptið og (held ég) bara einu sinni, sem er þá:
+
+npm init
+
+ég bjó til package.json !
+
+
+nún er hægt að fara inná npmjs.com og skoða packages, fyrst þarf að installa og fara síðan yfir Usage eða start,
+
+https://www.npmjs.com/package/project-name-generator td.
+
+-----npm init----
+nr1. Install þarf að gerast inní bash en ekki inní .js
+nr2. nota require inní .js gæti verið var generate = require('project-name-generator');
+nr3. nota start/ aðferð/ Use etc. og save-a það í var (kannski let)
+nr4. console.log(nafnið á varinu/let)
+nr4. opna bash og skrifa node index.js, þá opnast það sem við viljum
+
+
+
+var generate = require('project-name-generator');
+
+var boiil = generate().dashed;
+
+console.log(boiil);
+
+
+
+skoða aftur vid 224(npm package manager and installing...) ef ég lendi í eh vandræ.
+
+------------------------------------------------------------------------------------------------------------------------------------
+
+express.js er það sama og JQuery er fyrir Javascript (þæginleg og auðveldari leið til að framkvæma hluti.)
+
+express er basically essential ef maður ætlar að vinna mikið með node
+
+það að initiliza npm er mikilvægt skref áður en maður býr til vefsíðu, gott að gera og vita vel.
+
+
+
+skooo, að búa til server með express inní git bash (fara vel yfir vid 227, gera aftur og aftur, þekkja vel.)
+
+1. byrja að búa til nýja möppu
+2. inní möppunni þarf að búa til skrá sem heitir server.js
+3. initiliza npm og nota server.js sem starting file
+3b inní bash skrifa ---> npm install express
+4. inní vscode þarf að requirea express---> const express = require("express");
+4b const app = express();
+5. app.listen(3000);  ------má vera önnur tala
+6. runna serverinn með: npx nodemon server.js ---- annars væri það "node server.js"
+
+
+-hér stendur núna cannot get /
+
+
+localhost:3000 er núna eins og rót eða homepage.
+þegar við opnum vefsíðu þá erum við að senda request á server sem nær í eða "get-ar" vefsíðuna
+
+app.get("/") ------------------------------------- skástrikið representar rótina á vefsíðunni
+
+app.get("/", function(request, response){ -------- hérna er console.logað allt sem gerist þegar einhver requestar vefsíðuna localhost:3000 núna
+    console.log(request);
+})
+
+nota frekar req og res, í staðinn fyrir request og respond, best practice ! 
+
+
+app.get("/", function(req, res){ -------- núna er requestað síðuna og respondið við requestinu er Hello World!
+    res.send("Hello, world!");
+})
+
+þetta er allt gert (hér fyrir ofan) með callback functions, skoða ítarlega og skilja inní beinið.
+
+
+
+
+
+
+nodemon er notað til að restarta servernum automatically í staðinn fyrir að slökkva og kveikja á honum manually.
+
+npx nodemon server.js
+
+-og þá ætti hann að vera tengdur við "server.js"
+
+node fær kóðann til að keyra server side í staðinn fyrir client side, (á vefsíðunni sjálfri) 
+þá fær notandinn ekki að sjá hvað er í gangi á bakvið tjöldin, heldur bara hvað niðurstaðan er.
+
+
+til að fara á specifi staðsetningu inní git bash þá þarf að (helst) setja location inní dbl quotes ""
+cd "C:\Users\aronb\Downloads\webdev ný\calculator"
+
+
+
+res.sendFile(__dirname + "/index.html)
+
+þetta er best practice þegar maður fer að gera þetta í alvörunni og vinna með öðru fólki þar sem
+tvö niðurstrik og dirname mun finna hvar nákvæmlega fileinn er á tölvunni hjá þeim sem keyrir serverinn, (í staðinn fyrir td. bara index.html)
+
+__dirname gæti verið         (C/users/james/desktop/coding)
++ "/index.html" verður að    (C/users/james/desktop/coding/index.html)
+
+
+    <input type="text" name="num2" placeholder="second number">
+	---setja inní notes fyrir HTML, placeholder er grái textinn sem er í textaboxum og hverfur þegar maður byrjar að skrifa!
+
+
+fuckyiuyudufiiuuuuiiauusuduu!!!!!!!!!!!!
+
+----bryja uppánýtt
+
+-----hehehehe byrja uppánýtt og get þetta núna (self love <3, yfirstíga erfiðar hindranir)
+
+
+svona lítur allt út í VScode server.js núna:
+
+const express = require("express");
+const app = express();
+
+app.get('/', function(req, res) {
+    res.sendFile(__dirname + "/index.html");
+});
+
+app.post('/', function(req, res){
+    res.send('takk <3')
+})
+
+
+app.listen(3000, function (){
+    console.log("þú ert með þetta !");
+});
+
+
+
+---body parserinn
+til að reikna út tölurnar tvær og senda þær upplýsingar aftur á vefsíðuna notum við body parser, 
+parserinn gefur manni aðgang að variables og properties líka
+
+app.use(express.urlencoded({extended: true }));  --þetta er explicit en! seinna verður mikilvægt að declarea sérstaklega {extended: true}
+
+app.use(express.urlencoded());  -------------------þetta má, þar sem urlencoded er default true
+
+þar sem hún notar deprecataða leið til að ná í parserinn þá var þetta lausnin í kommentunum, 
+passa að hafa urlencoded efst uppi svo það virki
+
+kíkja hvort það virki, á undan res.send('takk<3') og eftir { skrifa
+console.log(req.body)
+
+þeas
+
+
+app.post('/', function(req, res){
+    console.log(req.body);
+    res.send('takk <3');
+})
+
+{ num1: '3', num2: '5', submit: '' }
+{ num1: '3', num2: '5', submit: '' }
+
+þetta er það sem birtist núna í bash eftir að ég slæ inn 3 fyrir fyrstu töluna og 5 (má vera hvað sem er)
+
+
+app.post('/', function(req, res){
+    console.log(req.body);
+
+    let num1 = req.body.num1;
+    let num2 = req.body.num2;
+    let results = num1 + num2;
+
+
+    res.send('takk <3, þetta er niðurstaðan: ' + results);
+})
+
+---ég slæ inn 3 og 8:
+
+takk <3, þetta er niðurstaðan: 38
+
+hér á eftir að breyta tölunum í tölur en ekki string. því er einfaldlega breytt með þessari aðferð:
+
+    let num1 = Number(req.body.num1);
+    let num2 = Number(req.body.num2);
+
+---ég slæ inn 3 og 8:
+
+takk <3, þetta er niðurstaðan: 11
+
+og ja, svona lítur HTMLið út:
+
+<body>
+    <h1>calcy</h1>
+
+    <form action="/" method="post">
+        <input type="text" name="num1" placeholder="first number">
+        <input type="text" name="num2" placeholder="second number">
+        <button type="submit" name="submit">calculate</button>
+    </form>
+</body>
+
+
+web application og kóðinn falinn frá notendanum --það sem ég er að gera núna með bakendanum og að keyra reikningsdæmi á server
+	v s
+static files being rendered, -- kóðinn og reikningsdæmi keyrð á vefsíðunni sjálfri, "client side"
+
+
+
+-----------uppá transparency og open source hugmyndafræði, er gott að hafa þetta í huga að gera kannski öfugt við það sem hún er að segja hérna,
+-----þannig að fólk geti endurnotað kóðann sem ég skrifa eða lært eitthvað/ hjálpað mér/ hjálpað hvort öðru
+--skoða betur hvort það séu í alvörunni eitthvað neikvætt við það að keyra einfalda reikningskóða í front end í staðinn fyrir backend
+hvort þetta sé bara til að fela "kóðann minn" eða hvort það séu "alvörunni" kostir við það að gera þetta svona
+
+
+
+xxxxxxxxxxxxxxxxxxxxxx...boilerplate node setup....xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+/*jshint esversion: 6 */ 
+
+const express = require('express');
+const app = express();
+
+
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
+
+app.get("/", function(req, res){
+res.send("helooo");
+});
+
+app.listen(3000, function () {
+    console.log('hello');
+});
+
+
+
+------------
+
+npm init
+
+npm i express
+
+npx nodemon eh.js
+
+
+--ef axios þá:
+
+npm install axios
+const axios = require('axios').default
+
+
+
+
+
+
+
+

@@ -1,0 +1,478 @@
+level 1
+fyrsta level af security
+
+þegar við erum búin að gera form sem er POST og með input type email og input type password
+þá res.renderum við "secrets"...
+
+taka vel eftir hérna að það er ekkert / á undan þar sem þetta er ekki síða sem við viljum að hver sem er geti skoðað heldur síða
+sem renderast eftir að userinn er búinn að skrá sig inn
+
+
+app.post("/login", function(req, res){
+    const username = req.body.username;
+    const password = req.body.password;
+
+    Auth.findOne({email: username}, function(err, foundUser){
+        if (err) {
+            console.log(err);
+        } if (foundUser) { 
+            if (foundUser.password === password) {
+                res.render("secrets");
+            }
+            
+        }
+    });
+});
+
+þegar einhver reynir að logga sig inn þá finnum við hvað usernameið er í gegnum req.body.username (inní form inní login.ejs)
+Auth er nafnið á DB, síðan findOne sem hefur þá rétt notendanafn þeas, það sem hefur verið skráð í database matchar við
+það sem þau slá núna inn í email, síðan callback, logga err ef það er, annars specifia hvað gerist ef email matchar við
+usernameið og öfugt, síðan er það ef að sá sem er foundUser hefur psw er það sama og var slegið inn seinast, fengið með 
+foundUser.password, þá loksins er hægt að renderea leyni síðu..
+
+sjá hvernig við þurfum ekki að findOne með pswið eða jafnvel findMany, nóg að tékka hvort að username og email sé það sama,
+ef að userinn er til þá er hægt að tékka hvort að pswið sem userinn á sé það sama og er geymt núna í DB (eftir að user registar)
+
+
+þetta er náttl, lélegt security þar sem ég get séð psw hjá client í gegnum mongoDB og ef einhver kæmist inná serverinn þá er allt
+exposed þar sem username og psw eru þar í plain text...
+
+
+
+
+level 2
+
+núna erum við að nota npm pakka sem heitir 'mongoose-encryption' og er einfalt tól til að encrypta en getur líka verið notað til að
+authenticata,
+
+fyrsta skref,,
+npm i mongoose-encryption
+
+hérna kemur aftur hvaða schema er gott að nota og afhverju, við erum núna búinn að vera nota einföldu útgáfuna af schemu, sem virkar
+fínt ef það á ekki að gera neitt auka eða flókið við hana, hinsvegar fyrir þennan pakka þarf að gera lengri og nákvænni schemu:
+
+
+einfalda:
+
+const userSchema = {
+nafn= String,
+aldur= String
+};
+
+
+fullgerða:
+
+const userSchema = new mongoose.Schema ({
+nafn = String,
+aldur = String
+});
+
+
+núna eru allskonar leiðir til að encrypta með mongoose-encryption, en þessi aðferð fyrir neðan er "Secret String Instead of Two Keys"
+hægt að sjá all á (https://www.npmjs.com/package/mongoose-encryption)..
+
+
+const secret = "thettaerlitidleyndarmal";
+userSchema.plugin(encrypt, { secret: secret, encryptedFields: ["password"]  });
+
+const User = new mongoose.model("User", userSchema);
+
+
+psw encryptast þegar userinn er saveaðu en decryptast þegar við notum findOne aðferð...
+
+ég slæ inn:
+
+email: lo@beho.ld
+psw  : herzog
+
+
+það sem verður til inní mongDB databaseinum er:
+
+{
+    "_id" : ObjectId("60b61a60fa6f8e1168bcbb8c"),
+    "email" : "lo@beho.ld",
+    "_ct" : { "$binary" : "YW+uQTdwv1fHe+FJ8KuufjwRaNTJnZrfrYnD9OIN4c/RlMhG9tV2SktGD8WH3sMlPw==", "$type" : "00" },
+    "_ac" : { "$binary" : "YSik5UUUoTuSpIOMBLdjMz25MoLAMVv8a9Oxyht958jzWyJfaWQiLCJfY3QiXQ==", "$type" : "00" },
+    "__v" : 0
+}
+
+´núna er vandamálið að ef síðan fer í loftið og er jafnvel git committuð í gegnum github að þá er mjög auðvelt fyrir fólk
+að decrypta þetta psw með því að renna í gegnum app.js og sjá const secret og allt það..
+
+
+
+
+level. 3
+
+installa dotenv npm pakka, sem geymir psw í environment variable.. þannig að fyrsta skref:
+
+npm i dotenv
+
+mikilvægt að setja þetta alveg á toppinn (beint undir //jshint) svo að allt virki, núna þarf að búa til .env skrá like so:
+
+touch .env
+
+
+og inní .env skránni er hægt að setja hluti sem hafa formattið af NAME_EH=Aron
+sem þýðir að þegar við gerðum const secret = ... það má færa það yfir í .env möppuna og formatta eins og fyrir ofan:
+
+const secret = "thettaerlitidleyndarmal";
+
+SECRET=thettaerlitidleyndarmal
+
+
+núna er ég búinn að deletea const secret = "thettaerlitidleyndarmal"; úr app.js og formatta öðruvísi til að geyma í .env
+
+núna þarf að kalla á SECRET frá .env til að matcha við það sem inní {secret: secret}:
+
+userSchema.plugin(encrypt, { secret: process.env.SECRET, encryptedFields: ["password"]  });
+
+
+núna er vandamálið að þegar við git committum projectið að þá er hægt að fara inní .env og sjá hvaða kóði SECRET er og decrypta,
+núna þarf að nota .gitignore:
+
+touch .gitignore
+
+og inní .gitignore er gott að setja linkinn fyrir neðan; mikið af basic hlutum sem eiga að vera ignoraðu (ásamt .env og .env_test)
+
+smá recap á git :)
+
+- git init
+- git add . / git add .nafn_á_specific_skrá.txt
+- git commit -m "itial commit"
+- git remote add origin https://github.com/storval/síðan_sem_ég_bjó_til_á_github/
+- git push origin master
+- 
+- git add . og síða git commit -m og síðan git push / git push origin master
+- recappa sjálfur á öllum skrefunum hehe
+-
+- git checkout -b "heiti_á_nýju_branchi"
+- git push origin head -u
+
+blablablaaa vera king í git þegar ég er kominn smá lengra, man margt en sumt sem var smá dæmi eins og detached head og commita á branch..
+
+
+
+anywayys, núna er mikilvægt að hafa í huga að þegar við git committum í fyrsta skiptið að það sé örugglega dotenv og .gitignore á .env
+ef við erum með síðu sem tekur á móti email/psw/API keyum/ kortaupplýs.. etc
+
+
+
+level 3
+hashing
+
+með hashing þarf ekki lengur að nota einhverskonar 'key' til að finna út hvað lykilorðið er, réttara sagt með hashing þá er það
+ekki decodað í plain texta, notandi fer á vefsíðuna og slær inn lykilorð og það breytist á hash.
+hash eru flóknar stærðfræðilegar jöfnur, sem lætur psw verða næstum því ógeranlegt að decode (næstum)
+
+hannað til að vera auðvelt að reikna í eina áttina (búa til psw) og mjöög erfitt í hina áttina (decoda)
+
+þannig að notandi býr til psw með registration
+notandinn loggar sig síðan inn og ef hashið passar við hashið sem hann notaði til að registera, þá kemst hann inn :)
+
+sjá hér að þetta er bæði í --> áttina, við þurfum ekki að geta reiknað (decodeað) til að vita hvort að psw sé rétt,
+hashið þarf bara að matcha við registered psw hashið.
+
+dæmið sem hún notar til að hasha með er MD-5 en það á víst ekki að vera nóg of gott þannig að eitt commentið á tutorialinu benti á
+sha-512, það er pakki á npm sem er svipaður og MD5 nema með sha-512 í staðinn.
+
+npm i js-sha512
+
+
+til að virkja hashið þá á staðnum þar sem psw: req.body.password, í staðinn fyrir það þá setjum við sha512 utan um það:
+
+
+app.post("/register", function(req, res){
+    const newUser = new User ({
+        email: req.body.username,
+        password: sha512(req.body.password)
+    });
+    newUser.save(function(err){
+        if (err) {
+            console.log(err);
+        } else {
+            res.render("secrets");
+        }
+    });
+});
+
+
+app.post("/login", function(req, res){
+    const username = req.body.username;
+    const password = sha512(req.body.password);
+
+    User.findOne({email: username}, function(err, foundUser){
+        if (err) {
+            res.render(err);
+        } if (foundUser) { 
+            if (foundUser.password === password) {
+                res.render("secrets");
+            }
+            
+        }
+    });
+});
+
+
+núna er hægt að skrá sig og það hashast á öruggan hátt, og síðan logga sig inn með sama pswordi :)
+
+
+vita að til að bæta gæði lykilorðs almennt að þá er einfaldat að hafa það lengra, ekki flóknara með mikið af stórum og litlum og symbols
+heldur hafa það langt (hjálpar að hafa stóran, lítinn og symbol) en sterkast er að gera það lengra, fleiri stafi
+
+
+
+
+level 4
+hashing & salting
+
+
+salting tekur lykilorðið sem hefur verið búið til og bætir við random char og tölur ofan á lykilorðið, síðan er það hashað,
+þannig að ef lykilorðið er lélegt eða auðvelt að cracka, þá er gott að vera búinn að 'salta' lykilorðið,
+
+lykilorð án salts  'qwerty'
+lykilorð með salti 'qwerty369odifoaihsdg8a78sd4'
+
+
+vita hvernig á að bregðast við dictionary attack og rainbow table attack, skoða muninn á sh512 vs sha256 og sjá hvað fólk er að
+tala um argon2
+password hash algorithmar sem eru NIST approved
+
+
+
+https://rietta.com/blog/bcrypt-not-sha-for-passwords/
+TL;DR; SHA1, SHA256, and SHA512 are all fast hashes and are bad for passwords. SCRYPT and BCRYPT are both a slow hash and are 
+good for passwords. Always use slow hashes, never fast hashes.
+
+svoo,, I guess að héðan frá notum við eins og BCrypt og Argon2 í staðinn fyrir sha512 eða sha256,
+
+skoða: 
+https://csrc.nist.gov/
+https://stackoverflow.com/questions/11624372/best-practice-for-hashing-passwords-sha256-or-sha512
+https://crypto.stackexchange.com/questions/46550/benchmark-differences-between-sha-512-and-bcrypt
+
+
+þegar maður er að nota bcrypt þá er hægt að velja hversu oft við viljum salta pswordið,
+þá tökum við lykilorðið, söltum það, og söltum niðurstöðurnar af því, tölum hashið af því söltum aftur, fáum hash úr því osfrv
+
+LTS inná node.js er latest stable version og er mikilvægt að vera með stable version svo að bcrypt virki,
+þeir vilja ekki að það sé möguleiki á einhverjum backdoors eða bugs etc
+
+annars á að vera auðvelt að nota nvm (https://github.com/nvm-sh/nvm)
+
+
+fara vel yfir og jafvel horfa á allt security moduleið aftur, level 4 er frekar heavy og mikið nýtt og flókin sambönd,
+þetta er hvernig kóðinn lítur út núna fyrir register og login:
+
+
+
+
+app.post("/register", function (req, res) {
+    bcrypt.hash(req.body.password, saltRounds, function (err, hash) {
+        const newUser = new User({
+            email: req.body.username,
+            password: hash
+        });
+        newUser.save(function (err) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.render("secrets");
+            }
+        });
+    });
+
+}); 
+
+
+app.post("/login", function (req, res) {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    User.findOne({
+        email: username
+    }, function (err, foundUser) {
+        if (err) {
+            console.log(err);
+        } else {
+            if (foundUser) {
+                bcrypt.compare(password, foundUser.password, function (err, result) {
+                    if (result === true) {
+                        res.render("secrets");
+                    }
+
+                });
+
+            }
+        }
+
+    });
+});
+
+
+
+
+
+
+level 5
+
+cookies og sessions, vegebréf, OAuth, sign in með google
+
+cookies geta verið til að halda utan um hvað einhver notandi vildi kaupa, þeas einhver setti eitthvað í körfuna á netinu, fór síðan
+útaf síðunni, lokaði jafnvel browsernum, svo í næst skiptið sem sami notandi færi á síðuna þá væri hluturinn ennþá í körfunni,
+---althouugh virðist saklaust og sniðugt, þá um leið og það er farið utan síðunnar á fb eða insta, etc þá poppar sama auglýsing upp
+-----cookies eru þá geymdar á notenda hliðinni, um leið og það er þá farið aftur á síðunna þá er maður að senda cookies sem maður
+sjálfur var að geyma sem einhver vefsíða bjó til, 
+
+(cookies, síða býr til, notandinn geymir, notandinn lokar síðunni, notandinn kemur aftur, notandinn óávitandi sendir cookies til baka)
+
+það þýðir samt ekki að það sé endilega hægt að vita hver notandinn er á meðan hann fer ekki aftur á síðunna, althoough þá frá reynslu
+minni og reynslu annara þá getur það eiginlega ekki verið satt, hvernig það svo sem virkar
+
+
+login sessions búa til cookie sem heldur utan um hvaða notandi er skráður inn og í hversu langan tíma getur hann komist á síðuna án
+þess að þurfa að skrá sig aftur inn, og á hvaða tímapunkti þarf hann að skrá sig aftur inn
+
+
+
+núna þarf að ná í nokkra pakka í gegnum npm
+
+npm i passport
+npm i passport-local
+npm i passport-local-mongoose
+npm i express-session
+
+(bara 'session' en ekki með s-i)
+(npm i passport passport-local passport-local-mongoose express-session)
+
+síðan
+
+const session = require('express-session');
+const passport = require("passport");
+const passportLocalMongoose = require("passport-local-mongoose");
+
+
+userSchema.plugin(passportLocalMongoose); ---hashar og saltar psw
+
+
+  serialise -- býr til cookie fyrir session og heldur utan um user ID án þess að reveala hver það er
+deserialise -- eyðir henni um leið og sessionið er búið, en gefur líka upplýs um hver notandinn er
+
+þegar við erum að nota sessions þá er gott að nota bæði serialise og deserialise (docs inná passortjs og docs á passport-local-mongoose)
+serialise býr til cookie með user id
+
+
+kóðinn fyrir login post frá Angelu, sem var með bug þar sem það var hægt að komast inn bara með að skrifa rétt email en hvaða psw sem er
+
+// app.post("/login", function (req, res) {
+//     const user = new User({
+//         username: req.body.username,
+//         password: req.body.password
+//     });
+
+//     req.login(user, function(err){
+//         if (err) {
+//             console.log(err);
+//         } else {
+//             passport.authenticate("local")(req, res, function(){
+//                 res.redirect("/secrets");
+//             });
+//         }
+//     });
+
+// });
+
+kóðinn sem var í kommentunum sem er öruggur, og JÁ hann savear notendann í DB, og engin bugss
+
+
+app.post("/login", passport.authenticate("local"), function(req, res){
+    res.redirect("/secrets");
+});
+ 
+
+
+
+level 6
+
+OAuth
+-open autherization
+
+hægt að nota til að fá upplýs um hverjir eru vinir þeirra sem vilja logga sig inná okkar síðu (þeas bjóða upp á möguleikann að
+gera eitthvað eins og, heyy sjáðu hvaða vinir þínir eru líka frá FB sem eru búnir að skrá sig inn! á x síðu) sem er ofc frekar leiðinlegt
+þeas ekki leiðinlegt en smá óþæginlegt, það verður að draga eigin mörk uppá persónuupplýsingar notenda sinna,
+ekki nota það sem mér þykir óþæginlegt við aðrar síður, ..
+
+OAuth er líka gott fyrir authentication (third party auth) eins og sp hvort að notandi vilji logga sig inná vefsíðuna með Google eða FB
+
+hér er hægt að velja hvaða upplýsingar við viljum fá frá notandanum, eins og þegar það stendur
+'blabla-vefsíða will recive the following info: ....'
+
+---sjá hvort það sé hægt að fá engar upplýsingar til baka, en bara nota þetta sem login,
+því færri persónuupplýsingar sem ég get geymt á síðunni minni, því betra
+
+sp um að reyna komast hjá því að nota fb eða google login (allaveganna fb) svo það sé hægt að carrya smá de-google og de-FB vision
+
+þekkja frekar betur (ekki tiltöllega deprecatað og buggy) hvernig á að logga notanda inn með bara notandanafni/email og psw
+
+
+http://www.passportjs.org/packages/passport-google-oauth20/
+-npm i passport-google-oauth20
+
+síðan fer maður inná google dev til að búa til project:
+https://console.developers.google.com/
+
+scope inná google er spooky,
+það er hægt að fá consent frá notanda um alltof mikið af upplýs, hér er nóg að gera aðeins:
+
+	.../auth/userinfo.email	See your primary Google Account email address	
+.../auth/userinfo.profile	See your personal info, including any personal info you've made publicly available	
+openid	Associate you with your personal info on Google
+
+althouuugh að það er auðvitað betra að logga fólk í gegnum bara notendanafn/email og psw,,
+bjóða uppá google signup í framtíðinni en mæla þá kannski frekar með að fólk geri hitt
+
+
+þegar allt er komið... (sjá aftur video fyrir óteljandi skrefin sem þetta tekur (better yet, sjá tutorial sem er ekki deprecatað))
+(þessvegna er eiginlega tilganslaust að leggja þetta á minnið/ skrifa niður, vegna þess að ég er ekki tilbúinn að luncha síðu
+og þetta er deprecated tutorial, yee) 
+þegar allt er komið þá fáum við 'client ID' og 'client secret'
+
+og við setjum núna bæði inní .env file með þeirra syntax:
+
+CLIENT_ID=xxxxxxxxxx
+CLIENT_SECRET=xxxxxxxxxxx
+
+og núna förum við inná passport.js síðuna (sjá fyrir ofan) og c+p bæði require en líka 'strategyuna'
+
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://www.example.com/auth/google/callback"
+  },
+  function(accessToken, refreshToken, profile, cb) {
+    User.findOrCreate({ googleId: profile.id }, function (err, user) {
+      return cb(err, user);
+    });
+  }
+));
+
+
+muna að til að sækja og nota það sem er í .env file og nota það í td app/server.js þá er það (process.env.NAFN_Á_ENVINU):
+
+
+
+
+hún bendir á að það sé sniðugt að fara inná:
+https://www.npmjs.com/package/mongoose-findorcreate
+
+til þess að virkja partinn þar sem það stendur findOrCreate (sjá fyrir ofan)'
+í staðinn fyrir að taka það út og fara eftir docs inná passportjs (findOrCreate er psuedo code / ekki alvörunni mongoDB/mongoose kóði)
+---hann er bara placeholder fyrir það sem við ættum að setja inn, með að lesa passport docs/ npm findOrCreate shortcut
+
+
+dododoodooo hin og þessi skref, síðan er hægt að console.log(profile) ---og allt sem maður fær til baka sem er definað í scope,
+og þá sér maður þær upplýsingar sem notandinn gaf leyfi á að deila,
+
+
+tips, byrja á að búa til portfolio yfir verkefni sem ég hef gert, og svol
+upwork, guru, freelancer (allt síður fyrir freelancing)

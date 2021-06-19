@@ -1,0 +1,52 @@
+búinn að installa gitbash
+fólk er að tala um að það geti komið í staðinn fyrir hyper terminal, sem er resourceful og smá vesen en falleg og sniðug
+
+as in.. prófa gitbash núna en vita samt af hyper terminal ef ég vil prófa seinna
+
+bash stendur fyrir Bourne Again Shell, sem er hægt að runna á UNIX sem er multitask, multiuser ofl ofl, tölvukerfi.
+
+---afhverju bash? -fyrir hraða, stjórn, sveigjanleika, edita og skoða allskonar sem birtist ekki í GUI af tölvum,
+
+
+mkdir - býr til nýja möppu
+ls    - listi yfir alla hluti sem eru á current stað inní terminalinu
+cd    - change directory
+rm    - remove
+rm *  - remove all, (öll files inní ákveðnri möppu)
+pwd   - print working directory, sýnir í hvaða folder maður er með bashið
+
+
+til að navigate á nýja stað þá notar maður cd og síðan nafnið á skránni sem maður vill fara í, en getur notað TAB til þess að
+filla automatically í hhvað mappan heitir, ef maður er nóg og specific, þeas
+
+do - downloads og documents (ekki nóg of specific)
+dow- downloads		    (nóg of specific)
+
+
+til að fara aftur í root, eða upphafspunkt terminals, þá er nóg að skrifa cd ~
+
+þetta merki ~ heitir tilde, það er hægt að copy paste frá netinu eða fara í Character map í search og leita af tilde, c&p þaðan
+
+---alveg eins og með javaScript í console, að það er hægt að skrolla upp og niður til að velja aftur það sem maður hefur gert.
+
+hægt að nota cd .. til að komast einu leveli nær rootinu/ til baka
+
+
+ctrl+e fer á byrjun,
+ctrl+a fer aftast,
+ctrl+u hreinsar cmdið sem er búið að skrifa/ er
+
+
+til að búa til file, þá er skrifað touch
+til að búa til möppu þá er skrifað mkdir
+til að eyða möppu þá er skrriiifap rm -r aronmappa/
+
+td. touch hugl.txt
+
+
+hægt að opna skrár með "start" og síðan nafnið á skránni+extensionið fyrir fileinn .txt .doc .wav
+
+
+
+
+

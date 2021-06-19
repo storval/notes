@@ -1,0 +1,483 @@
+
+
+allskonar commands úr mongoDB notes:
+
+- mongod og mongo í nýjum bash glugga (alltaf) áður en maður gerir eh með mongo/mongoose
+- alt + f2 til að opna nýjan bash glugga
+- help fyrir hjálp
+- show dbs til að sýna hvaða DB eru í boði
+- show collections til að sjá hvaða hlutir eru inní ákveðnu DB
+- db til að sjá hvar maður er, í hvaða DB
+- db.nafn_á_nýju_collectioni.insertOne({hey: "hi"}) til að búa til nýtt collection/ bæta við item í collection
+- db.nafn_á_collectioni.find() til að finna hvaða items eru inní collectioninu
+- db.nafn_á_collectioni.updateOne({_id: 1}, {$et: {stock: 32}}) til að bæta við eh eins og stock
+-----vita að hér er hægt að copy pastea hvað id-ið er ef maður gerði ekki _id: tala þegar itemið var búið til
+- db.nafn_á_collectionu.deleteOne({_id: "60a3ae93293e3c85e41c1f88"}) eyðir iteminu með þetta _id
+- sudo pkill -f mongod ef það kemur upp eitthvað alvarlegt network error og ekkert virkar
+- db.dropDatabase() til að eyða heilum DB/ database, hér þarf að vera inní Databaseinu sjálfu til að þetta virki
+
+
+
+----boilerplate mongoose-----
+
+/*jshint esversion: 6 */
+
+
+const mongoose = require('mongoose');
+ 
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+
+const Cat = mongoose.model('Cat', { name: String });
+
+const kitty = new Cat({ name: 'Zildjian' });
+kitty.save().then(() => console.log('meow'));
+
+
+
+1. búa til möppu
+2. touch app.js
+3. npm init
+4. npm i mongodb
+5. npm i mongoose
+
+
+
+
+til að búa til nýtt schema (nokkrar leiðir til að gera þetta, þessi leið er mjög 'specific')
+þetta er leið til að búa til umgjörð fyrir hvað er hægt að setja inn í "fruits"
+---nei þetta var ekki typo.... ef maður býr til fruitSchema þá er það fleirtalað með Lodash frá mongoose, breytist í 'fruits'
+hér er base: 
+
+
+hér er með smá umgjörð um hvað má bæta inní þessa schemu:
+
+const fruitSchema = new mongoose.schema ({
+   nafn: String,
+   aldur: Number,
+   markmid: String	
+});
+
+
+nú er hægt að nota SCHEME til að búa til MODEL, passa að hafa STÓRAN STAF Í MODEL
+vita líka að hér er búið til nafnið á collectioninu, sem er mongoose.model("nafn_á_collection")
+
+const Fruit = mongoose.model("Fruit", fruitSchema)
+
+const fruit = new Fruit ({
+   nafn: "fames",
+   aldur: 55,
+   markmid: "stækka"
+})
+
+
+
+það þarf að passa mjög vel uppá hvar er stór og lítill stafur...þessi formúla í b-um:
+
+
+
+
+
+const bSchema = new mongoose.schema ({hvað má setja inn})
+
+const B = mongoose.model("B", bSchema)
+
+const b = new B ({setja inn, eftir því sem má setja inn})
+
+
+
+núna þarf að gera b.save(); eða fruit.save();
+--þá saveast hluturinn inní collectionið, inní databasinu... passa samt að commenta út .save() eftir að það er komið inn
+-----svo að það gerist ekki oft
+
+
+
+MMMMMMMUUUUUUUNNNNNNNNNNNAAAAAAAAA!!!!!!!!
+
+MUNA MUNA MUNA
+
+til að leita í bash (mongo bash) að það töfralega birtist 's' á bakvið það sem maður býr til sem collection..
+
+þegar maður er í rétta DB, þá er hægt að sjá með show collections, finna nafnið með bættu 's-i' við,
+---- db.blablas.find() voilaaaaaaa
+
+get ekki db.los.deleteOne({_id: "60a3ca73b870d03678592637"}) af einhverri ástæðu
+---kemur samt acknowledged en delete count 0???
+
+
+
+um leið og ég keyrði npx nodemon app.js og inní mongoose möppunni birtist hoeDB aftur (það var eins og það hefði deleteast)
+skoða hvort þetta sé til aðeins á server eða í alvörunni á tölvunni
+---hér er vandamálið að ég veit ekki hvað ég veit ekki, kannski er þetta í fullkomnu lagi
+
+
+
+
+
+
+const loSchema = new mongoose.Schema({
+    baby: String,
+    honey: Number
+});
+
+const Lo = mongoose.model("Lo", loSchema);
+
+const lo = new Lo ({
+    baby: "heyy",
+    honey: 90
+});
+
+
+
+--- þetta virkar
+1. búa til schemu og parameters/ scaffolding
+2. búa til model
+3. búa til x = new X (má vera hvað sem er)
+
+
+
+
+
+
+const stortHus = new Hus({
+    tegund_af_husi: "modernískt frá 1965",
+    lidan: "of einfalt",
+    aldur: "50"
+});
+
+const litidHus = new Hus({
+    tegund_af_husi: "klassískt sveitahús sem afi byggði sjálfur",
+    lidan: "góð",
+    aldur: "26"
+});
+
+Hus.insertMany([stortHus, litidHus], function(err){
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("allt virkar eins og það á að virka :)");
+    }
+});
+
+
+db.hus.find()
+{ "_id" : ObjectId("60a6479150f3c62a9049f19a"), "tegund_af_husi" : "brútalískt frá 1950", "lidan" : "stórt og yfirgnæfandi en fallegt", "aldur" : 20, "__v" : 0 }
+{ "_id" : ObjectId("60a649d790ee4221f8f3771f"), "tegund_af_husi" : "modernískt frá 1965", "lidan" : "of einfalt", "aldur" : 50, "__v" : 0 }
+{ "_id" : ObjectId("60a649d790ee4221f8f37720"), "tegund_af_husi" : "klassískt sveitahús sem afi byggði sjálfur", "lidan" : "góð", "aldur" : 26, "__v" : 0 }
+
+
+
+---gott að taka eftir að Hus þarf ekki að vera hus = Hus, má vera gult_hus = new Hus
+----- function err er bara til að láta mann vita ef eh error er, annars kemur 'allt eins og það á að virka' inní app.js bashinu
+--------annars er þetta leiðin til að 'insertMany' og sjá hvernig það er as einfalt að setja hlutina í array eftir að þeir eru specifiaðir
+
+
+það er hægt að .find() inní vscode/app.js/servernum til að vera meira specific um hvað maður vill fá úr leitinni:
+
+Hus.find(function(err, hus){
+if (err) {
+console.log(err);
+} else {
+console.log(hus)
+}
+})
+
+
+[
+  {
+    _id: 60a6479150f3c62a9049f19a,
+    tegund_af_husi: 'brútalískt frá 1950',
+    lidan: 'stórt og yfirgnæfandi en fallegt',
+    aldur: 20,
+    __v: 0
+  },
+  {
+    _id: 60a649d790ee4221f8f3771f,
+    tegund_af_husi: 'modernískt frá 1965',
+    lidan: 'of einfalt',
+    aldur: 50,
+    __v: 0
+  },
+  {
+    _id: 60a649d790ee4221f8f37720,
+    tegund_af_husi: 'klassískt sveitahús sem afi byggði sjálfur',
+    lidan: 'góð',
+    aldur: 26,
+    __v: 0
+  }
+]
+
+
+
+þar sem (err, hus) er þá væri venjulega orðið í fleirtölu, þeas automatic Lodash fleirtölu sem bætir við 's-i'
+--vita líka að núna er outputtið/ formattið sem fengið er til baka sem javaScript object sem er inní array, þá er hægt
+----að tap into allskona aðferðir og þessháttar til að breyta searchinu, skoða mongoose docs en líka JS object docs
+
+það er hægt að skippa það með:
+
+mongoose.pluralize(null);
+
+en í tilfellinu með orðið hus, þá er smkv mongoose plural útgáfan af því ekki til eða bara sama og hus,
+passa sig sérstaklega á þessu!
+
+
+hér er dæmi hvernig .find() inní vscode með mongoose getur verið aðeins meira specific:
+
+
+Hus.find(function(err, hus){
+    if (err) {
+        console.log(err);
+    } else {
+        hus.forEach(function(hus){
+            console.log(hus.tegund_af_husi);
+        });
+    }
+});
+
+
+brútalískt frá 1950
+modernískt frá 1965
+klassískt sveitahús sem afi byggði sjálfur
+
+
+
+vita að það er hægt að 'loka' tengingunni með bæði:
+
+mongoose.connection.close();
+eða
+mongoose.disconnect();
+
+eitthvað með best practice að gera, en átta mig ekki á því hvar eða nkvl hvernig,
+til að mongoose keyri ekki án þess að stoppa sem getur ollið crashi og eh errors...
+sama hvernig JS í chrome crashaði stundum browserinn ef maður gerði vitlaust inní while loopu eða for/forEach...
+
+hér er dæmi um stað sem hún ætti að vera í:
+,,, (lesa aftur kommentin á vidinu 337 ef ég gleymi)
+
+
+
+Hus.find(function(err, hus){
+    if (err) {
+        console.log(err);
+    } else {
+
+        mongoose.connection.close();
+
+        hus.forEach(function(hus){
+            console.log(hus.tegund_af_husi);
+        });
+    }
+});
+
+
+
+brútalískt frá 1950
+modernískt frá 1965
+klassískt sveitahús sem afi byggði sjálfur
+[nodemon] clean exit - waiting for changes before restart
+
+
+Finding the fruits was the last tag in our example. We close the connection after we're done with our database. It doesn't matter if 
+we have this line of code before the logging because when the callback is triggered we've already received our fruits data.
+-angela
+
+
+það er hægt að vera með validators, sem er þá td min og max output af einhverju eða þetta þarf að vera === þetta, (td með id)
+lítið dæmi:
+
+
+const loSchema = new mongoose.Schema({
+    baby: String,
+    honey:  {
+    type: Number,
+    min: 1,    
+    max: 10
+    }
+});
+
+
+á svipaðan hátt er hægt að bæta við validator fyrir string, þeas, að það sé td bannað að sleppa því að hafa string inní baby:
+
+
+const loSchema = new mongoose.Schema({
+    baby: {
+    required: [true, "það þarf að fylla inní alla reiti"]
+    }
+    honey:  {
+    type: Number,
+    min: 1,    
+    max: 10
+    }
+});
+
+ef einhver setur string fyrir babay: þá gerist ekki neitt, á meðan ef einhver sleppti því, þá koma skilaboðin 'það þarf að fyllla...'
+
+
+til nota að .updateOne, eða bæta inn nýjum hlut (x: y) í það sem þetta heitir, hlut sem er inní collection sem er inní database..:
+
+Lo.updateOne({_id: "s973fg96e838ey3e98"}, {vedrid_uti: léttskýjað}, function(err){
+if (err) {
+console.log(err)
+} else {
+console.log("veii, all gekk vel!")
+}
+});
+
+
+
+til að nota .deleteOne,,, mjöög sniðugt, þarf bara að specifia eitt sem er unique og satt við það item sem maður vill deleta
+---- hægt að vera name: eða aldur: eða hvað sem er (þarf ekki að vera _id: en getur verið það) like this:
+
+
+Hus.deleteOne({aldur: "26"}, function(err){
+    if (err) {
+        console.log(err);
+    } else {
+        console.log("vel gert, item deleted!");
+    }
+});
+
+hér eyddi ég:
+{ "_id" : ObjectId("60a649d790ee4221f8f37720"), "tegund_af_husi" : "klassískt sveitahús sem afi byggði sjálfur", 
+"lidan" : "góð", "aldur" : 26, "__v" : 0 }
+
+
+
+það er hægt að nota sömu aðferð með deleteMany, þar sem allt sem er (x: y) verður deleteað
+
+Hus.deleteMany ({borg: "rvk"}, function(err){
+    if (err) {......
+
+
+
+til að embedda/ bæta við/ includa/ establisha relationship milli tveggja hluta þá þarf að tengja þá í schemunni like soo:
+
+const loSchema = new mongoose.Schema({
+    baby: String,
+    honey: Number,
+    hus_upplys: husSchema
+});
+
+const einhver_man = new Hus({
+    tegund_af_husi: "gamalt",
+    lidan: "góð",
+    aldur: 60
+});
+
+const randy = new Lo ({
+    baby: "bradianne",
+    honey: 7,
+    hus_upplys: einhver_man
+});
+
+randy.save()
+einhver_man.save()
+
+
+EKKI GLEYMA HÉRNA,,,, til að save-a þetta þá er ekki hægt að save-a lo.save() og hus.save() ohnoo, það þarf að vera hvað
+---nýja itemið heitir.... þeas randy og einhver_man
+
+AAAAAAAAAAAAHHH, passa svo óóóóotrúlega mikið uppá stóran staf og lítinn staf, kemur OFT ekki fram að neitt sé að, að allt sé
+rétt og eftir tveggja klst leit á netinu og engin svör kemur í ljós að ahhh jáa, fyrir deleteOne og Many er stór stafur fyrir Hus / Lo
+
+til að slökkva á 'pluralization' í mongoose er :
+mongoose.pluralize(null);
+og kannski þarf að allowa pluralize(null) í typescript, vita en ekki nota fyrr en það er must eða vita aðeins meira og síðan...
+https://github.com/Automattic/mongoose/issues/5947
+
+
+
+kóðinn so far (þar sem það virkar að embedda shcemu inní aðra shcemu!!)
+
+
+const mongoose = require('mongoose'); 
+mongoose.connect('mongodb://localhost:27017/hoeDB', {useNewUrlParser: true, useUnifiedTopology: true});
+
+
+const oldSchema = new mongoose.Schema({
+    town: String,
+    low: String
+});
+
+const Old = new mongoose.model("Old", oldSchema);
+
+const old = new Old ({
+    town: "patró city baby",
+    low: "windyy"
+});
+
+const jamy = new Old ({
+    town: "patre",
+    low: "whosh"
+});
+
+// old.save();
+// jamy.save();
+
+
+
+const einnSchema = new mongoose.Schema({
+    hello: String,
+    bless: String,
+    gamli: oldSchema
+});
+
+const Einn = mongoose.model("Einn", einnSchema);
+
+const einn = new Einn ({
+    hello: "heyy",
+    bless: "bæjoo"
+});
+
+const randy = new Einn ({
+    hello: "hiboo",
+    bless: "biboo",
+    gamli: jamy
+});
+
+// einn.save();
+// randy.save();
+
+
+
+málið er.... áður en það er saveað 'randy' eða 'jamy' þá þarf að hafa eitthvað sem er það sem shceman heitir savaeð sem table,
+þeas, einn = new Einn, og síðan er hægt að gera randy = new Einn, vita líka að það er ekki hægt að bæta við embedduðu
+schema inní einhvern hlut sem er til, án þess að nota updateOne, annars bara búa til nýjan og setja embeddið beint inn,
+þeas þeas, skoða kóðan vel og sjá hvernig uppröðun og flæði er, sorrý framtíðar ég fyrir að vera smá óskýr.
+
+
+hér er gott að vita að þó að við höfum gert einu sinni einn = new Einn og old = Old að það má halda áfram að gera það nema með 
+nýjum upplýsingum, held að þetta sé til að búa til nýjan FLOKK í staðin fyrir HLUT í flokknum.
+þeas þegar maður gerir þetta aftur (einn = Einn) að þá er nýr hlutur í FLOKK sem er búið að declarea 
+
+þeas aftur, ef maður gerir td. old = Old aftur nema með núna viðbættri embedd schemu, þá verður til einn sem er eins og hann var
+og síðan annar sem er með embeddaða, þannig að þetta virkar ef það er það sem maður vill annars nota updateOne
+
+recap á update one, er uppi...(alveg eins og delete one)
+
+
+meira um mongoose í todo
+
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.....boilerplate mongoose......xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+
+/*jshint esversion: 6 */
+
+
+const mongoose = require('mongoose');
+ 
+mongoose.connect('mongodb://localhost:27017/test', {useNewUrlParser: true, useUnifiedTopology: true});
+
+const Cat = mongoose.model('Cat', { name: String });
+
+const kitty = new Cat({ name: 'Zildjian' });
+kitty.save().then(() => console.log('meow'));
+
+
+
+
+1. búa til möppu
+2. touch app.js
+3. npm init
+4. npm i mongodb
+5. npm i mongoose

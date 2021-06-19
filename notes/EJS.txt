@@ -1,0 +1,631 @@
+
+EJS - embedded javaScript Templating
+
+
+1. touch index.html app.js
+2. npm init
+3. npm i express
+4. npx nodemon app.js
+
+
+einfaldur kóði sem nær í sýnir hvaða dagur er í dag:
+
+app.get("/", function (req, res) {
+
+
+    let today = new Date();
+    let iDag = today.getDay()
+    
+    if (iDag === 6 || iDag === 0){
+        res.write("helgi baby");
+    } else {
+        res.write("memee vikudagur");
+        res.send();
+    }
+});
+
+0-sun
+1-man
+2-þri
+3-mið
+4-fim
+5-fös
+6-lau
+
+"alltaf byrjað á núll þegar það er talið í kóðun"
+
+
+bannað að gleyma res.sendFile(__dirname + "/nafnÁSkrá.html");
+
+
+til að ná í EJS (inní bash):
+npm i EJS
+
+
+
+fyrir neðan const app...kemur setupið fyrir EJS
+
+const app = express();
+
+app.use("view engine", "ejs");
+
+
+inná github wiki um hvernig á að nota EJS með express https://github.com/mde/ejs/wiki/Using-EJS-with-Express
+þá kemur fram að til þess að þetta geti virkað þá er gert ráð fyrir að það sé mappa sem heiti views með skrá sem heitir index.ejs
+
+þá þarf að búa til möppuna (lowercase 'views')
+og síðan skránna inní (index.ejs)--- má heita eh annað en index
+
+oooooog núna má byrja að skrifa HTML kóða inní ejs filenum!
+---núna er hægt að senda einhvern JavaScript kóða inní HTMLinu!!
+
+<p>Hann var að labba og það var<%= weatherData %> úti og honum leið <%= randomMood %><p>
+
+<%= JavaScript_variable %>
+
+
+í staðinn fyrir res.sendFile þá er núna hægt að nota res.render
+
+
+
+res.render("nafnÁSkrá.ejs", {nafnÁVarInníEjs: nafnÁVarInníAppjs})
+
+--þannig að það renderar skránna sem er .ejs og síðan þarf að búa til var inní .ejs skránni og : er til að segja að þetta var er sama og varið
+-----sem er inní app.js eða .js sem er serverinn
+
+
+hér er kóðinn inní app.js so far:
+
+
+
+
+const express = require('express');
+
+const app = express();
+
+app.set("view engine", "ejs");
+
+app.use(express.json());
+app.use(express.urlencoded({
+    extended: true
+}));
+
+
+app.get("/", function (req, res) {
+
+
+    let today = new Date();
+    let dagaIndex = today.getDay();
+    let vikudagarnir = ["sunnudagur", "mánudagur", "þriðjudagur", "miðvikudagur", "Fimmtudagur", "föstudagur", "laugardagur"];
+
+    let iDag = vikudagarnir[dagaIndex];
+    
+    res.render("index", {dagurinn: iDag })
+});
+
+
+
+app.listen(3000, function () {
+    console.log('hello');
+});
+
+
+
+
+----
+kóðinn inní index.ejs:
+
+
+
+//boilerplate fyrir ofan....
+</head>
+<body>
+    <h1>t o - d o</h1>
+    <p>Í dag er <%= dagurinn %></p>
+</body>
+</html>
+
+
+
+
+sjá að inní index.ejs að það þarf ekki að "búa til" varið áður en maður notar það
+bara að muna að setja það á milli <%= %> og að það sé svo inní server.js/app.js sem res.render("index", {dagurinn: iDag})
+
+
+vita!!
+---sumir nota res.render("index",  {iDag: iDag})
+------bara ef maður er að vinna með fólki að vita að þetta er gert, getur verið ruglandi
+----------þá gera þau bæði <%= iDag %> og síðan búa þau til var inní app/server.js sem heitir líka iDag
+
+
+skoða betur switch statements ef maður er með fleiri en fimm if else
+
+
+okii sko
+inní index.ejs filenum er hægt að skrifa jacaScript kóða líka en hann þarf að vera inní ákveðnum syntaxa,
+og hann er line to line based, sem þýðir að fyrir hverja línu sem er JS þá þarf <% %>
+---þegar það er unnið með JS og HTML saman þá þarf að passa að ekkert HTML sé inní ejs syntaxt og að allt JS sé line based syntax, mjög nákvæmt
+
+
+...svona lítur if else statement með JS og HTML
+
+<% if (dagurinn === 'laugardagur' || dagurinn === 'sunnudagur') { %>
+	<h1>í dag er <%=dagurinn%></h1>
+<%} else { %>
+	<h3>í dag er<%=dagurinn></h3>
+<%} %>
+
+veit ekki hvort þetta sé best practice ennþá, en hún sýnir þetta svona,
+--- template engine og view engine (ejs, vue, jade), skoða betur
+
+
+logics á að gerast á bakendanum/servernum og þessvegna er gott að gera allt þar en nota "scriplet tags"(ejs) varfærnislega, og þegar það er viðeigandi
+
+
+
+það má renna aftur vel yfir vid 268 / skoða hvernig best practice(2021) notar post request án body parsers til að búa til todo lista
+
+
+
+scope
+-------kanna vetur scope sem er ekki deprectaed, theory (hvað er local og hvað er global, innan um function og innan
+if/else / for / while loop)
+
+þar sem general reglan er að með function er allt local, en allt sem er declareað utan functions er global
+---verður smá skrítið með if/ else/ for / while þar sem var getur verið global á meðan let og const eru bæði local
+-------málið er að,,,,,,, var er depracated og ekki notað ennþá, þannig að, já, athuga aðeins ítarlegra
+
+
+as a static resource...
+---hvernig á að includea .js eða .css filea með express?
+---það er nefn ekki hægt með því að búa til css möppu og still.css og vona að express loadi því upp þegar localhost er keyrt..
+-----margir búa til skrá/ dir sem heitir public, þar er hægt að setja inn "static" skrár sem eiga að loadast um leið og localhost fer í gang
+--------þar sem... express runnar aðeins app.js/server.js og síðan views möppuna sem inniheldur .ejs skránna
+
+
+1. búa til public dir í projectinu
+2. fyrir neðan express..urlencoded(parserinn) að skrifa app.use(static("public"));
+3. !! það þarf samt að linka css srkánna inní .ejs (link... href="css/stilar.css") (ef mappan heitir css og skráin heitir stilar.css(bæði í public)) 
+
+
+þegar server hliðin fer að verða flóknari og stærri getur verið gott að geyma eitthvað af 'logicinu' í nýjum skrám, eins og með 
+--- css og JS skrár þegar meður gerir HTML,, fyrst er að búa til skrá.. td. date.js og inní
+
+þar sem þessar skrár eru local að þá þarf að nota __dirname til að komast að þeim og inní app.js/server þá er gert þetta, efst (f neðan sonst express):
+
+const nafn = require(__dirname + "/nafn.js");
+
+á meðan, inní nafn.js
+
+module.exports = boo;
+
+function boo () {
+eh function
+}
+
+og síðan inní app.js er núna hægt að velja á hvaða stað maður vill að þetta function gerist/ hvað sem er inní nafn.js, vid 272
+taka líka eftir module.exports, þar sem "útkoma" nafn.js þarf að hafa einhverskonar export sem er hægt að hafa inní app.js/ server
+----sú "útkoma" verður síðan hægt að nota inní app.js hvar sem er...
+
+---exportið úr nafn.js er javaScript object, sem hefur þá properties og method (sjá mdn)..
+
+þá verður hægt að exporta meiri en einu functioni með:
+
+module.exports.boo = boo;
+
+--þetta er þá gert fyrir heitið á hverju functioni fyrir sig og ef það er console.logað þá sést að boo: function og síða (ef maður vill)
+----- boo2: function líka...
+
+recap:
+
+geyma skrá sem inniheldur eina eða margar function fyrir app.js/server sem er hægt að runna hvar sem er á app/server þar sem þarf,
+--- inní skránni þarf að gera module.exports þar sem það er export af þessum functionum, og inní app/server þarf að requira skránna sjálfa
+
+
+hér er gott að hafa tvennt í huga:
+--mismunandi leiðir til að declarea function https://dmitripavlutin.com/6-ways-to-declare-javascript-functions/
+--node docs um hvernig shortcuts virka fyrir module.exports, td. hægt að sleppa því að skrifa modules, gera aðeins exports... osfrv
+
+
+mögulega þarf að raða body parserinum upp þannig að 
+
+app.use(express.json());
+--er ofarlega
+
+
+
+app.use(express.urlencoded({
+  extended: true
+}));
+----er alveg neðst (fyrir ofan port xxx)
+
+
+
+
+
+
+
+þegar maður downloadar projectum af git að þá er stundum sleppt því að includa pakkan sem verður til þegar maður npm install inní bash
+--þessvegna er gott að kíkja yfir skrárnar sem fylgja projectinu og sjá hvort þær innihaldi möppuna "node_modules"
+-----þetta er gert til að spara pláss
+
+fyrsta sem er gert með þetta verkefni er þá að fara í bash og skrifa npm install
+
+ég ætla að horfa aftur á ejs partinn til að reyna skilja...
+
+
+
+
+
+-------------------------------------------------------------------------------------------------------
+
+ég að horfa aftur á þetta module og reyna skilja betur (EJS)
+
+-------------------------------------------------------------------------------------------------------
+
+
+
+eða ToDo list 2
+
+--
+
+
+res.send er "final" sem maður sendir til baka á serverinn
+þeas, það er ekki hægt að vera með mörg res.send, í staðinn notað res.write og annað... þannig að:
+
+res.write...
+res.write...
+res.send();
+
+einnig:
+
+res.sendFile(__dirname + "/index.html");
+res.send();
+
+
+templating:
+þegar maður þarf að breyta htmlinu eftir einhverri logic sem breytist í servernum.
+---hugsa samt, hvenær er þörf á þessu og hvernær má það gerast "client" megin..
+
+ejs.co
+https://github.com/mde/ejs/wiki/Using-EJS-with-Express
+
+
+fyrir neðan const app= express... þarf að gera:
+app.set('view engine', 'ejs');
+
+
+til að 'activatea' eða nota view enginið þarf að nota res.render (sjá github wiki um hvernig á að nota ejs með express)
+
+núna þarf að búa til möppu/dir sem heitir 'views' 
+inní henni er hægt að geyma þær skrár sem eru renderaðar af ejs
+
+núna er hægt að gera inní views, inní index.ejs eitthvað.. td. <p> og inní því kemur <%= ejs %> </p>
+<%= %> er notað til að halda utan um var sem var búið til inní servernum/app.js
+
+til að 'activatea' þetta ejs tag, þá er notað res.render, þar sem stendur index getur verið hvað sem er svo lengi sem
+---skráin inní views heitir það sama (ejs skráin)
+------síðan ætlum við að 'passa inn javaScript object', muna hér að þeir eru powerful og geta margt, skoða mdn osona
+foo: það sem varið er kallað inní ejs filenum
+FOO: það sem varið er kallað inní app.js/server
+
+
+res.render("index", {foo: FOO});
+
+
+inní ejs skránni, ef það er javaScript þar þá þarf að setja <% JS %> utan um allt sem er ekki HTML, td:
+þetta virkar á 'line by line' þeas, hver ný lína þarf að vera annaðhvort JS eða HTML/ eitthvað og síða HTML
+
+<% if (day=== 0 || day===6) { %>
+<h1> Það er <%= hvadaDagur %>! </h1>
+<% } else { %>
+<h1> það er því miður <%=hvadaDagur%> </h1>
+<% } %>
+
+mesta augnaertingin en þetta er það sem ég er að læra núna, þekkja vonda leið til að skilja styttri leið I hope (með þetta allaveganna)
+---fólk er að tala um vue.js sem alternative, skoða, augun opin, þekkja bæði
+
+til að fá hvaða dag, mánuð og ár það er:
+
+let = d = new Date();
+var n = d.toLocaleDateString();
+6/5/2021
+
+let o = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+let = d = new Date();
+let n = d.toLocaleDateString("en-US", o);
+Thursday, May 6, 2021
+
+!!--það er hægt að hafa tímann í íslensku með ("is-IS")
+
+
+
+muna að passa data aftur í VScode/app.js/server eftir að eitthvað hefur gerst 'client' megin er POST request
+
+við erum búinn að gera soldið af post request í gegnum form, með submit takka og hann lítu svona út:
+
+    <ul>
+        <li>100</li>
+        <li>200</li>
+    </ul>
+
+    <form class="" action="/" method="post">
+        <input type="text" name="takki">
+        <button type="submit">bæta við</button>
+    </form>
+
+-unordered listi (með bullets ekki tölum) með list items sem verður hægt að bæta inní 
+-form búið til sem er með action sem fer í home route og method sem er post
+-post tekur þá upplýsingarnar frá því sem er búið til inní forminu og sendir það aftur í home route (spcifiað með action)
+-síðan kemur input:text
+-síðan kemur button:submit
+-buttoninn mun triggera post sem er inní form sem skilar niðurstöðunni í '/' eða home route
+
+núna kemur Cannot POST eftir að eitthvað er slegið inn í textaboxið, 
+því það á eftir að taka á móti post requestinu, server megin, hér er notað app.post:
+
+app.post("/", function(req, res){
+console.log(req.body.takki)
+})
+
+
+// https://expressjs.com/en/resources/middleware/body-parser.html
+// Node.js body parsing middleware.
+// Parse incoming request bodies in a middleware before your handlers, available under the req.body property.
+// þetta hefur með middleware og body parser að gera, skoða betur middleware.. lítur út fyrir að það skipti ekki máli hvort´
+// það sé parseað með 'npm i body-parser' eða hvort það sé notað built in parserinn með express.urlencoded..
+
+það sem er skrifað í textaboxið núna birtist í bash...
+
+
+
+app.get("/", function(req, res){
+  
+let o = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+let = d = new Date();
+let n = d.toLocaleDateString("is-IS", o);
+let FOO = n;
+
+res.render("index", {foo:FOO, takki:takkiMinn});
+});
+
+app.post("/", function(req, res){
+  var takkiMinn = req.body.takki;
+  res.redirect("/");
+});
+
+
+ég bætti við res.redirect("/")
+--sem þýðir að þegar það er búið að posta einhverju í gegnum formið á index.ejs að þá birtist það á listanum en
+---þú ert ennþá á home route þegar það gerist, eins og refresh held ég,,
+
+hér er vandamál sem hefur að gera með scope, dæmið þar sem var/let/const er ekki til nema bara innní sínu function
+og það er ekki hægt að sækja það utan functionsins, eins og núna er takkiMinn ekki defined...
+---hér er hægt að laga þetta með því að búa til takkiMinn sem tómt variable ofarlega fyrir neðan const app express...:
+
+let takkiMinn = "";
+
+
+hér er allur app.js/server kóðinn so far:
+
+
+/*jshint esversion: 6 */ 
+
+
+const express = require('express');
+const app = express();
+
+
+var item = "";
+app.set('view engine', 'ejs');
+
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
+
+
+app.get("/", function(req, res){
+  
+let o = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+let = d = new Date();
+let n = d.toLocaleDateString("is-IS", o);
+let FOO = n;
+
+res.render("index", {foo:FOO, takki:item});
+});
+
+app.post("/", function(req, res){
+  item = req.body.takkiNew;
+  res.redirect("/");
+});
+
+
+app.listen(3000, function () {
+    console.log('hello');
+});
+
+
+-----------------------
+index.ejs fyrir neðan
+-----------------------
+
+<body>
+    <p>hiiiiiii</p>
+    <p>hér er ejs var boii framundan: <%= foo  %> </p>
+
+
+    <ul>
+        <li>100</li>
+        <li>200</li>
+        <li> <%= takki %> </li>
+    </ul>
+
+    <form class="" action="/" method="post">
+        <input type="text" name="takkiNew">
+        <button type="submit" name="button">bæta við</button>
+    </form>
+
+</body>
+
+
+
+taka veeel eftir því hvað allt heitir og hvernig það er:
+
+foo      - aðeins declareað einu sinni í ejs skránni, síðan í res.render sem FYRRI itemið
+takki    - aðeins declareað einu sinni í ejs skránni, síðan í res.render sem FYRRI itemið
+FOO	 - inní app.get sem var fyrir n, sem er toLocaleDateString..og sem SEINNA itemið inní res.render
+takkiNew - nafnið á inputinu inní form, inní app.post sem req.body.takkiNew
+item	 - var utan um takkiNew inní app.post, EFST uppi sem tómt var, og sem SEINNA itemið inní res.render
+
+
+--núna virkar toDo listinn nema í staðinn fyrir að það bætist við item þá er seinasta itemið bara alltaf að updateast
+
+núna breytum við item í items og höfum það sem tómt array [], í staðinn fyrir tómt string "":
+
+var items = [];
+
+fyrir neðan req.body.takkiNew kemur:
+
+items.push(item)
+
+ooog núna heitir það líka items í staðinn fyrir item inní {takki:items}
+
+
+vandinn n´´uúúúnaa er að í staðinn fyrir að það komi nýr bullet point listi á listann þá kemur:
+* teioo, sisiis, siso, (hvert dæmi með kommu fyrir aftan einn bullet point)
+
+
+copy pastea kóðann?
+
+
+
+scope:
+local variable, þegar var er búið til inní function, þá er aðeins hægt að ná í og nota það innan um það function
+global variable, þegar var er búið utan functions/ eitt og sér, þá er hægt að nota það allstaðar, inní nýju functioni eða hvar sem er
+----hins vegar, með for loop, while loop og allt annað en function þá er var global á meðan let og const eru local
+
+
+það þarf að fá express til að 'serve up' css skrá ef maður vill bæta við stílum,
+og einnig fyrir javaScript eða hvaða aðra skrá sem er sem er 'static'
+---hvernig?:
+
+venjulega er búið til möppu sem heitir 'public',, má heita annað (hér fer td skrá sem heitir styles.css)
+og fyrir neðan parserinn ofarlega kemur:
+
+app.use(express.static)("public");
+
+síðan í index.ejs:
+    <link rel="stylesheet" href="styles.css">
+
+--síðan þarf að linka þær eins og maður gerir venjulega fyrir css (link href) eða JS (link script)
+
+svona segjum við express að 'servea' upp allar skrárnar og möppurnar sem eru inní 'public'!
+
+
+
+console.log(req.body)
+
+hérna:
+
+app.post("/", function(req, res){
+  let item = req.body.takkiNew;
+  console.log(req.body);
+  items.push(item);
+  res.redirect("/");
+});
+
+inní bash:
+{ takkiNew: 'dfskj', list: '' }
+
+
+---fá upplýsingar til baka hjá post request hvaða upplýsingar og hvernig item er að koma til baka,
+------sjá að það er hægt að breyta valueinu fyrir td button
+
+button hefur nafnið 'list'
+það er hægt að bæta við value fyrir button, svo það sé hægt að nota takkan til að skrá upplýsingar á
+--home route en líke öðrum stöðum eins og /work
+
+
+
+layouts með ejs
+notað td til að geyma header og footer fyrir vefsíðu sem á að vera conistent yfir allar mismunandi /about /journals...
+gert með:
+<%- header -%> <%- footer -%>
+
+inní views möppunni er búið til header.ejs og footer.ejs
+
+síðan specifiar maður fyrir öll .ejs fileana (sem eru ekki header og footer) efst uppi og neðst niðri að includa head og foot:
+
+  <%- include("header"); -%> 
+	html
+  <%- include("footer"); -%> 
+
+
+gott dæmi með /about hvernig skrefin eru.
+
+1. búa til about.ejs inní views möppunni
+2. búa til get route... app.get("/about", function(req, res){res.render("about")}; );
+3. bæta við header og footer á about síðuna með include
+
+templating vs layouts í ejs,
+svipað en samt eitthvað smá öðruvísi, skoða betur þegar það þarf aftur, annars er 
+layouts varðandi header og footer html td og
+template sem leyfir <% ejs_var %>
+
+
+hafa það í huga að kóði sem er ekki beintengdur bakenda logic, app.us/redirect get post og þannig á helst ekki að vera í bakendanum
+þeas lítill partur af JavaScript eða einhverju öðru... bakendi fyrir bakenda...
+það er því betra að búa til okkar eigin litlar 'module' til að tækla ákveðinn part af síðunni (td, date.js, puzzle.js etc)
+
+1. búa til module fyrir date
+2. setja function utan um allt, skýra function(eða ekki?)
+3. í endann kemur return statement (return day;)
+4. module.exports = nafniðÁFunctioninu
+
+--
+nú er hægt að kalla það fram með module.exports !!!muna exportS ekki export!!
+
+
+efst uppi hjá const express og þar, er hægt að requirea date svona
+const date = require(__dirname + "/date.js")
+
+passa hér að þegar það er kallað fram í app.js/server að það er ekki alltaf gott að callbackið/functionið runni strax
+
+kveikja á function með getDate() en ekki getDate;
+
+
+skooo,,,
+eftir að það er búið að const date = require(__dirname + "/date.js") 
+og líka module.exports = getDate;
+þá má kalla það fram hvenær sem er með getDate();
+
+maður gerir module og fer með kóðann svona svoo hann sé reusable og með sitt eigið module sem er auðvelt að breyta
+og nota fyrir margar síður, (hugsa um stærri project og hvernig þetta er mjög good þar)
+
+
+module.exports er javaScript object sem hefur alla þá eiginleika, mdn js object, w3 js object,, skoða og þekkja betur
+---margir eiginleikar 
+
+vita bara núna tiny að það er hægt að vera með fleira en eina module.exports ef það er td tvö functions inní date.js
+með því að gera:
+
+module.exports.getDate = getDate;
+// function getDate(){....}
+
+module.exports.klukkan = klukkan;
+// function klukkan(){....}
+
+í staðinn fyrir
+
+module.exports = getDate......(þarf sitt eigið module til að virka, ekki hægt að kalla á meiri en eitt function)
+
+
+
+tip, það er hægt að savea function sem var til að kalla það fram easyy
+tip, í staðinn fyrir module.exports þá er hægt að nota exports
+
+
+
+
+

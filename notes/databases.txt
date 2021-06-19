@@ -1,0 +1,46 @@
+vita að það er erfitt að velja sér gott tungumál í bakendanum til að sjá um gagnagrunn / databases
+--kynna mér þetta vel og sjá hvað fólk er að segja og taka mína eigin ákvörðun
+
+en stærsti munurinn er ef þetta er SQL eða NoSQL, 
+
+
+
+
+SQL = structured query language, 
+gamli skólinn gott, gilt en gamalt....................td...MySQL......postgreSQL
+
+---table structure og mögulega minna svigrúm fyrir eitthvað óvænt eða nýtt
+
+klassískari uppsetning og vel virta gamla góða kerfið
+relational
+hægt að vera með tables sem eru td með customer id sem relatar við annað sem er vara keypt og myndar tengsl á milli margra tafla
+limited scalability
+eins og að byggja skýjagljúfur, scalear upp,
+Table Structure
+
+
+
+
+NoSQL= not only structured query language
+aðeins mismunandi uppsettning og mism formattað,......td....mongoDB...redis
+
+byggt á td JSON structure og þá stjórnar maður gögnunum á meira fljótandi hátt og hægt að breyta
+
+meira flashy, einfaldara, nútímalegur syntax, 
+non-relational
+maður ber sjálfur ábyrgðina að tengja saman mismunandi JSON keys og value pairs og gæti verið erfitt að leita í gegnum
+gott scalability
+eins og að byggja lítil og traust hús, scalear lárétt
+Document structure
+
+
+
+fyrir hvert database tungumál þá er essential að geta gert CRUD áður en það er farið lengra sem er:
+
+Create
+Read
+Update
+Destroy
+
+
+tékka á SQL moduleinu fyrir info um basics ef áhuginn fyrir SQL kemur eh soony, annars er ég akkúrat núna að hallast að noSQL

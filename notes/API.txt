@@ -1,0 +1,677 @@
+api - Application Programming Interface
+commands, functions, protocols and objects sem notandi getur notað til að búa til forrit eða function með því að bæta við kóða
+vefsíður mun heimila notkun á ákveðnum upplýsingum frá API, allskonar data frá FB, spotify, etc, á meðan einhver partur af því er falinn
+---næstum eins og samningur milli þess sem býr til APIið og þess sem býr til forrit í kringum það
+-----Jquery er td API
+
+td með veður API fær maður aðgang að
+-hitastigi
+-hvernig veður er
+-mynd af veðurskilyrðum
+
+hér eru fjórir stórir essential hlutir um API, sem má mastera útfyrir námskeiðið:
+
+-Endpoint ----------Endpoints er veitingahúsið
+-Paths -------------Paths er það sem ég get pantað, blaðsíðurnar á matseðlinum
+-Parameters---------Parameters er hvernig ég vil hafa matinn
+-Authentication-----x
+
+--------------------skoða hvort allt þetta sé betur gert í PHP, MySQL, eða einhverskonar öðrum bakenda------------
+
+
+endpoint er eins og rótin á tréi sem er linkur
+
+https://sida.lo/api/stjornur
+----td upplýsingar um einhverjar random stjörnur ------------------------------(endpoint)
+
+https://sida.lo/api/stjornur/solkerfi2
+----td upplýsingar um einhverjar random stjörnur innan um ákveðið sólkerfi ----(path)
+
+https://sida.lo/api/stjornur/solkerfi2?contains=nebulax30
+----ef síðan býður uppá leit um ákveðna stjörnu inní APIinu þá er það ---------(parameter)
+
+https://sida.lo/api/stjornur/solkerfi2?contains=nebulax30&type=giants
+----ef það eru fleiri en einn parameter þá er hann fyrst skrifaður með'?' og síðan '&' fyrir alla sem koma á eftir fyrsta
+
+
+sumir kjósa að monetiza databaseið sitt, hversu mikið þeir leyfa notandanum að nota, hversu mikinn aðgang
+þegar databasið er orðið stórt og með mörg þúsund notendur þá er þetta eitthvað sem er gott að hafa í huga, fyrir API og bakendann
+
+
+það er hægt að nota Postman App til að skoða og testa mismunandi API
+--oft gerir fólk villur eða eitthvað álíka, gott að vita en ekki nauðsynlegt.
+-----reyndar sniðugt til að sjá hvaða upplýsingar maður fær frá APIinu, það er strúktúrað á mjög clean og góðan hátt,
+--------aftur, sniðugt en ekki nauðsynlegt
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+JSON
+-JavaScript Object Notation
+
+
+
+---
+bara til að hafa það crystally clearrrr að svona lítur kóðinn minn út í app.js (fyrir weather project)
+og fyrir neðan er það sem ég hef þurft að gera í bash
+
+
+const express = require("express");
+const app = express();
+
+app.get("/", function (req, res){
+res.send("hello2")
+})
+
+app.listen(3000, function(){
+    console.log('hello');
+})
+
+--------------------------------
+bash
+--------------------------------
+
+npm init
+
+npm install express
+
+npx nodemon app.js
+
+------------------------------------------------------
+
+GOTT AÐ VITA: sumir savea það sem maður þarf að skrifa inní javascript servernum sem copy/paste boilerplate,
+vita bara hvað maður þarf að breyta ef eitthvað fer úrskeiðis, annars mjög sniðugt að gera þetta :)
+
+núna lítur kóðinn svona út:
+-note- hér þarf að requirea https, sem er isntallaðan native í gegnum npm, (þarf ekki að gera neitt inní bash en þarf að requira í js)
+
+const express = require("express");
+const https = require("https");
+
+const app = express();
+
+app.get("/", function (req, res){
+        const url = "https://api.openweathermap.org/data/2.5/weather?q=Reykjavik&appid=069ff06cb5079e9ba963369d1f6924ee&units=metric"
+        https.get(url, function(res){
+            console.log(res);
+        })
+    res.send("hello2")
+})
+
+app.listen(3000, function(){
+    console.log('hello');
+})
+
+
+
+----
+það má breyta console.log(res) yfir í console.log(res.statusCode) til að skoða status code
+þá kemur 200
+en líka gæti komið eitthvað sem væri hægt að troubleshoota með því að fara yfir docs yfir https status codes 
+
+
+
+---þetta er hexidecimal kóði, 
+
+<Buffer 7b 22 63 6f 6f 72 64 22 3a 7b 22 6c 6f 6e 22 3a 2d 32 31 2e 38 39 35 34 2c 22 6c 61 74
+
+bara önnur leið til að displaya kóða, hægt að skoða hann á td. https://www.qbit.it/lab/hextext.php
+
+niðurstaða----{"coord":{"lon":-21.8954,"lat
+(byrjunin á kóðanum frá weatherApp)
+
+
+inní app.js er hægt að converta textann með JSON.parse(data) eða fullan kóðann:
+
+
+
+            res.on("data", function(data) {
+                const vedurData = JSON.parse(data)
+                console.log(vedurData)
+            })
+
+
+----
+
+
+þegar það er verið að vinna með stóra API pakka og stóran JSON, þá getur verið erfitt að navigata í gegnum allt til að displaya það sem maður vill
+þetta virkar smá eins og með querySelector og Document.lastElementChild,
+þar sem við veljum fyrst það sem er efst eða trjábolurinn á trénu, síðan í grein, og minni grein og þangað til við erum með það sem við viljum
+td:
+
+úr JSON / APIinu fyrir WeatherAPP er þessi kóði:
+
+  main: {
+    temp: 7.51,
+    feels_like: 3.52,
+    temp_min: 7,
+    temp_max: 8,
+    pressure: 1026,
+    humidity: 66
+  },
+
+ef ég vil displaya feels like þá bý ég til const inní:
+
+            res.on("data", function(data) {
+                const vedurData = JSON.parse(data)
+
+(nýtt)----------const temp = vedurData.main.temp
+(nýtt)----------console.log(temp)
+
+
+niðurstaða: 7.51
+
+(vid 244)
+
+
+
+MIKILVÆGT
+það er bara hægt að vera með einn res.send eftir boilerplatinn fyrir server, (req, res) function(){}
+
+
+upplýs um .on aðferð hefur eitthvað að gera með data sem við sendum frá okkur eftir að einhver er búinn að requesta eh frá manns eigin server.
+-----eitthvað varðandi að vita að upplýsingaflæðið er asynchronus og ja, kanna hvað asynchronus er.
+
+
+með JSON handler sem er ég bætti við í chrome extensions, þá get ég séð mjög skýrt hvaða path ég þarf að nota til að breyta upplýsingunum
+JSON handler, virkar eins og JSON awesome sem Angela var að tala um í vidunum en í raun er hægt að nota hvaða "JSON handler" sem er
+með honum komst ég að því að til að sjá description hlutinn af veðrinu er inní kóða sem lítur svona út:
+
+{
+  coord: { lon: -21.8954, lat: 64.1355 },
+  weather: [
+    {
+      id: 802,
+      main: 'Clouds',
+      description: 'scattered clouds',
+      icon: '03n'
+    }
+
+
+þá nota ég:
+
+weather[0].description
+
+--scattered clouds
+
+
+
+allur kóðinn í app.js:
+
+const vedurAlmennt = vedurData.weather[0].main;
+console.log(vedurAlmennt);
+
+--scattered clouds
+
+
+
+------------------------------allur kóðinn hingað til:----------------------------------------------------------
+
+
+const express = require("express");
+const https = require("https");
+
+const app = express();
+
+app.get("/", function (req, res) {
+
+    const url = "https://api.openweathermap.org/data/2.5/weather?q=Reykjavik&appid=069ff06cb5079e9ba963369d1f6924ee&units=metric"
+
+    https.get(url, function (blabla) {
+        blabla.on("data", function (data) {
+            const vedurData = JSON.parse(data);
+            const temp = vedurData.main.temp;
+            console.log(temp);
+            const temp2 = vedurData.main.feels_like;
+            console.log(temp2);
+            const vedurAlmennt = vedurData.weather[0].description;
+            console.log(vedurAlmennt);
+        });
+
+
+    })
+
+})
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+
+------------------------------------------------------------------------------------------
+
+þar sem það má bara vera eitt res.send þá er hægt að display veðrið (hversu heitt, feels like, og almennt) svona út:
+
+res.send("<h1>Veðrið í Reykjavík er " + temp + " °C" + "<br/>" + 
+"Það líður eins og " + temp2 + "°C" + "<br/>" + "Úti er " + vedurAlmennt + " </h1>");
+
+EN, eitt sem hún gleymdi að nefna er res.write aðferðin, þá er hægt að breyta kóðanum fyrir ofan svona:
+
+            res.write("<h1>Veðrið í Reykjavík er " + temp + " °C </h1>");
+            res.write("<h1>Það líður eins og " + temp2 + "°C </h1>");
+            res.write("<h1>Úti er " + vedurAlmennt + " </h1>")
+            res.send();
+
+---NEMA hvað, þetta er niðurstaðan:
+
+VeÃ°riÃ° Ã­ ReykjavÃ­k er 5.16 Â°C
+ÃžaÃ° lÃ­Ã°ur eins og 2.29Â°C
+Ãšti er broken clouds
+
+
+----ég sá einhverja umræðu um þetta á github (bookmarked) þar sem það segir að með JSON og express að það sé encodeað til að lesa ekki
+UTF-8, réttara sagt JSON og express eru með harðkóðað 'content type' sem breytir UTF-8 og býr til invalid stafi
+----það er hægt að bypassa þetta með 'buffer' og það ætti ekki að skipta neinu máli en það þarf nota force til að komast framhjá þessu
+---------og allra mikilvægasta, er einhver önnur sniðugari leið til að 
+--------------stutt: það er flókið að nota text/html með JSON, en hægt, en veit ekki hvað ég veit ekki hérna, hvað er betra, er eitthvað betra?
+
+
+
+
+1. fengum live data frá API
+2. gerðum HTTPS get request til að fá data sem JSON format
+3. Parse(uðum) JSON til að breyta því úr Hexidecimal yfir í lesanlegan JSON (basically JavaScript)
+4. náðum í ákveðna hluti til að sýna á vefsíðunni með JSON-handler (og líka bara fara yfir kóðann og sjá)
+5. sendum allt til baka á síðunni með res.write og res.send
+
+
+
+Parse: skipta upplýsingunum í deildir og hluti, sem eru skiljanleg
+stringify: gerir öfugt, ef við viljum geyma upplýsingar á meiri compact hátt 
+(dæmið með IKEA skápinn, pakkinn keyptur er Stringify, settur upp og tilbúinn er parsed)
+
+
+The JSON format is syntactically identical to the code for creating JavaScript objects.
+Because of this similarity, a JavaScript program can easily convert JSON data into native JavaScript objects.
+
+
+
+
+
+npm i body-parser....(ER DEPRECATED)
+muna að nota rétt hérna 
+https://stackoverflow.com/questions/24330014/bodyparser-is-deprecated-express-4 
+
+// Express v4.16.0 and higher
+// --------------------------
+const express = require('express');
+
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
+
+---hér þarf ekki að installa neitt í gegnum bash afþví að þetta er pre-isntalled inní Express
+
+þetta er notað til að parse-a data sem við fáum úr post request frá client inná vefsíðunni
+
+
+...plís ekki gefast upp!!...
+...byrja bara upp á nýtt!...
+lllllllleeeeeysa vandan, gogogogogoog! :) <3
+
+
+okkkiii skoo,
+þetta hefur eitthvað að gera með parserinn og hvar hann er staðsettur, ef hann er staðsettur svona:
+
+
+const express = require("express");
+const https = require("https");
+
+
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+--þá mun hann gera post request áður en ég geri eitthvað, og allt kemur út eins og það virki, 
+hins vegar ef hann er staðsettur alveg neðst þá kemur grænt ljós og kannski virkar allt, holup
+
+
+const express = require("express");
+const https = require("https");
+
+const app = express();
+
+app.get("/", function (req, res) {
+
+    const url = "https://api.openweathermap.org/data/2.5/weather?q=Reykjavik&appid=069ff06cb5079e9ba963369d1f6924ee&units=metric"
+
+    https.get(url, function (response) {
+        response.on("data", function (data) {
+            const vedurData = JSON.parse(data);
+            const temp = vedurData.main.temp;
+            const temp2 = vedurData.main.feels_like;
+            const vedurAlmennt = vedurData.weather[0].description;
+            console.log(vedurAlmennt);
+            res.write("<h1>Vedrid er " + temp + " c</h1>")
+            res.write("<h1>Vedrid feels like " + temp2 + " c</h1>")
+            res.write("<h1>Thad er " + vedurAlmennt + " uti</h1>")
+            res.send()
+        });
+    })
+})
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+virkandi
+
+----
+muna hvernig string concactenatin virkar
+
+"http://openweathermap.org/img/wn/10d@2x.png"
+
+"http://openweathermap.org/img/wn/" + icon + "@2x.png"
+
+
+
+------------
+const express = require("express");
+const https = require("https");
+
+const app = express();
+
+app.get("/", function (req, res) {
+
+    const url = "https://api.openweathermap.org/data/2.5/weather?q=Reykjavik&appid=069ff06cb5079e9ba963369d1f6924ee&units=metric"
+
+    https.get(url, function (response) {
+        response.on("data", function (data) {
+            const vedurData = JSON.parse(data);
+            const temp = vedurData.main.temp;
+            const temp2 = vedurData.main.feels_like;
+            const vedurAlmennt = vedurData.weather[0].description;
+            const icon = vedurData.weather[0].icon
+            const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png"
+            res.write("<h1>Vedrid er " + temp + " c</h1>")
+            res.write("<h1>Vedrid feels like " + temp2 + " c</h1>")
+            res.write("<h1>Thad er " + vedurAlmennt + " uti</h1>")
+            res.write("<img src="+ imgURL +  ">")
+            res.send()
+        });
+    })
+})
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+
+--
+virkandi 2
+
+
+
+const express = require("express");
+const https = require("https");
+
+const app = express();
+
+app.get("/", function (req, res) {
+
+    res.sendFile(__dirname + "/index.html");
+    // const query = "paris"
+    // const url = "https://api.openweathermap.org/data/2.5/weather?q=" + query + "&appid=069ff06cb5079e9ba963369d1f6924ee&units=metric"
+
+    // https.get(url, function (response) {
+    //     response.on("data", function (data) {
+    //         const vedurData = JSON.parse(data);
+    //         const temp = vedurData.main.temp;
+    //         const temp2 = vedurData.main.feels_like;
+    //         const vedurAlmennt = vedurData.weather[0].description;
+    //         const icon = vedurData.weather[0].icon
+    //         const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png"
+    //         res.write("<h1>Vedrid er " + temp + " c</h1>")
+    //         res.write("<h1>Vedrid feels like " + temp2 + " c</h1>")
+    //         res.write("<h1>Thad er " + vedurAlmennt + " uti</h1>")
+    //         res.write("<img src="+ imgURL +  ">")
+    //         res.send()
+    //     });
+    // })
+})
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+
+--
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <label for="cityInput">city name:</label>
+    <input id="cityInput" type="text" name="cityName">
+</body>
+</html>
+
+
+virkandi 3 + html
+
+
+const express = require("express");
+const https = require("https");
+
+const app = express();
+
+app.get("/", function (req, res) {
+
+    res.sendFile(__dirname + "/index.html");
+    // const query = "paris"
+    // const url = "https://api.openweathermap.org/data/2.5/weather?q=" + query + "&appid=069ff06cb5079e9ba963369d1f6924ee&units=metric"
+
+    // https.get(url, function (response) {
+    //     response.on("data", function (data) {
+    //         const vedurData = JSON.parse(data);
+    //         const temp = vedurData.main.temp;
+    //         const temp2 = vedurData.main.feels_like;
+    //         const vedurAlmennt = vedurData.weather[0].description;
+    //         const icon = vedurData.weather[0].icon
+    //         const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png"
+    //         res.write("<h1>Vedrid er " + temp + " c</h1>")
+    //         res.write("<h1>Vedrid feels like " + temp2 + " c</h1>")
+    //         res.write("<h1>Thad er " + vedurAlmennt + " uti</h1>")
+    //         res.write("<img src="+ imgURL +  ">")
+    //         res.send()
+    //     });
+    // })
+});
+
+app.post("/", function(req, res){
+    console.log("takk");
+})
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+-----
+breaking news (virkandi kóði fyrir neðan, fylgjast vel með hvar parserinn er staðsettur:)
+-----
+
+const express = require("express");
+const https = require("https");
+
+
+const app = express();
+
+
+
+
+
+app.get("/", function (req, res) {
+
+    res.sendFile(__dirname + "/index.html");
+    // const query = "paris"
+    // const url = "https://api.openweathermap.org/data/2.5/weather?q=" + query + "&appid=069ff06cb5079e9ba963369d1f6924ee&units=metric"
+
+    // https.get(url, function (response) {
+    //     response.on("data", function (data) {
+    //         const vedurData = JSON.parse(data);
+    //         const temp = vedurData.main.temp;
+    //         const temp2 = vedurData.main.feels_like;
+    //         const vedurAlmennt = vedurData.weather[0].description;
+    //         const icon = vedurData.weather[0].icon
+    //         const imgURL = "http://openweathermap.org/img/wn/" + icon + "@2x.png"
+    //         res.write("<h1>Vedrid er " + temp + " c</h1>")
+    //         res.write("<h1>Vedrid feels like " + temp2 + " c</h1>")
+    //         res.write("<h1>Thad er " + vedurAlmennt + " uti</h1>")
+    //         res.write("<img src="+ imgURL +  ">")
+    //         res.send()
+    //     });
+    // })
+});
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.post("/", function(req, res){
+    console.log(req.body.cityName); 
+})
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+
+muna að það er hægt að búa til margar skrár á sama tíma með 'touch index.html app.js blaa.html' í staðinn fyrir touch á undan öllum skránum
+require er deprecated, í staðinn er notað axios eða
+
+
+---------------------------------------------------byrjunarpunktur
+const express = require('express');
+const axios = require('axios').default
+const app = express();
+
+
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+
+npm init
+npm install express
+npm install axios
+
+----------------------------------
+
+const express = require('express');
+const https = require('https')
+const app = express();
+
+
+app.get("/", function(req, res){
+    res.sendFile(__dirname + "/signup.html")
+})
+
+app.use(express.json());
+app.use(express.urlencoded({
+  extended: true
+}));
+
+
+app.post("/", function(req, res) {
+    var fyrstaNafn = req.body.fyrsta;
+    var seinnaNafn = req.body.seinna;
+    var email = req.body.email;
+
+    console.log(fyrstaNafn, seinnaNafn, email);
+})
+
+
+app.listen(3000, function () {
+    console.log('hello');
+})
+
+
+xxxxxxxxxxxxx
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="stylesheet" href="still.css">
+
+    <title>beopa</title>
+
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/sign-in/">
+
+    <!-- Bootstrap core CSS -->
+    <link href="../../dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="signin.css" rel="stylesheet">
+</head>
+
+<body class="text-center">
+    <form action="/" class="form-signin" method="post">
+        <h1 class="h3 mb-3 font-weight-normal">Póstlisti</h1>
+        <input type="text" name="fyrsta" class="form-control" placeholder="Fyrsta nafn" required autofocus><br><br>
+        <input type="text" name="seinna" class="form-control" placeholder="Seinna nafn" required><br><br>
+        <input type="email" name="email" id="inputPassword" class="form-control" placeholder="netfang" required><br><br>
+        <br><br>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">skrá mig á póstlista !</button>
+    </form>
+</body>
+
+</html>
+
+
+---
+app.js og signup.html sem virka, núna er css fileinn reyndar dottin út, hmmm
+þar sem custom style sheetið er local/static þá þarf að breyta því í static (static sem fylgir express)
+
+annað godamnn deprecatuð aðferð sem hún er að sýna
+
+rétta leiðin er að nota þetta einhverstaðar í .js 'header':
+
+app.use(express.static(__dirname + "/mappaMeðCSS"));
+
+
+
+
+pooopyyyyy
+
+---skoða mailchimp betur eftir alltsaman, 90% deprecated BS
+
+
+þar sem við erum að vinna með status codes núna þá er hægt að else ifa það sem tengist þeim beint:
+
+if (response.statusCode === 200) {
+res.send("þú náðir að skrá þig á póstlistann !"); 
+} else {
+res.send("það kom upp einhver villa :( ");
+}
+
+
+athuga með heroku.com --- voru einu sinni að bjóðast upp á að hosta server frítt fyrir fólk, (gæti hafa breyst)
+
+ekki nóg of góð síða til að vera að finna strax út hvernig á að deploya hana á netið, heroku sem server provider lítur samt vel út,
+
+
+
+
+
+
+
+
+
+
+
+

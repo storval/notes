@@ -1,0 +1,100 @@
+react
+
+a javascript library for building user interfaces, (front end framework essentially)
+
+við leyfum ákveðnum hlutum af vefsíðunni að vera algjörlega sjálfsæðir, eins og lítið box utan um HTML, css og JS t.d
+þar sem við getum búið til mörg lítil box og hvert box sér um að updatea sig sjálft, gera sitt eigið function osfrv
+án þess að þurfa að reloada síðunni í hvert skipi
+
+getum sett 'eins og embeddað' saman HTML element í minni parta og einingar, <my_header><my_body><eh_footer>
+þar sem við defineum stílinn og functionalitiið á hverjum og einum hlut
+
+við notum codesandbox (.io) til að testa og vinna með react, það er hægt að savea projectin með því að 'forka' þau, nema að þá
+verða þau ekki alvörunni forkuð á github heldur savveast projectið á síðunni sjálfri og eftir að maður er búinn að forka að þá
+er nóg að ýta á ctr+s til að save-a 
+
+
+JSX
+
+by convention we always create á div element that has an id of root:
+<div id=root></div>
+
+sem er þá rótin á reaxt appinu sjálfu, þeas allt sem er búið til inní react er sett inní þetta div
+oog við notum ekki index.html neitt meir, og í staðinn gerum við allt inní index.js,
+núna viljum við require-a bæði 'react' og 'react-dom':
+
+const React = require("react");
+const ReactDOM = require("react-dom")
+
+
+sooooo,,,, React er facebook Open-Source-Project (https://opensource.facebook.com/projects/)
+---fá það á hreint hvaða upplýsingar þeir geyma og hversu mikið control þeir hafa yfir React
+
+greinilega er REACT ekki undir OSI approved list (https://opensource.org/)
+
+
+ughhh,,
+9 klukkustundir eftir að þessu tutorial sem ég byrjaði á í janúar og núna er júní,
+klára þetta bara af, skima í gegnum öll mikilvægu conceptin sem fylgja með þessu sem eru ekki React exclusive, 
+en eftir þetta námskeið verður vuejs og JavaScript + í alvörunni að búa til project og ekki bara klára námskeið holy :)
+
+anywayys, React :(
+
+skoða aðeins betur Babel, sem er javaScript compiler, sem gerir javascript kóða keyranlegann á mörgum gömlum browserum/ forritum,
+og jafnvel eitthvað miklu meira, skoða betur.
+
+vooo, nota import frekar en require,
+
+gamla - const blabla = require("BlaBla")
+nýjaa - import blabla from BlaBla
+
+meira straightforward, sjá hvort að þetta sé best practice eða ekki, skoða líka compatibility
+cool okii, import virkar fyrir alla browser fyrir utan IE, sem er náttl officially dead núna
+
+brush up á (auðvitað) JS, statements vs expressions
+
+expression er kóði sem endar á að vera eitthvað value, verður eh value
+jafnvel 'const x = 5' er expression þar sem x(5) verður að (5)
+jafnvel 'const y = flokid_function()' er expression, þeas flokid_function() verður að einhverju
+
+expression = eitthvað verður að einhverju
+
+á meða if, for og while eru td. statements, þau executea ákveðna hegðun en verða aldrei að einhverju, verða aldrei að value
+
+mikilvægt að vita fyrir computation og hvernig tölvan tekur á móti reikningsdæmum, hvað má og hvað má ekki, tiny recap
+https://www.youtube.com/watch?v=WVyCrI1cHi8&list=PL-xu4i_QDSxcoDNeh8rx5-pHCCTOg0XsI&index=15
+
+
+rifja aftur upp template literals {´$´} gert takkanum hægra megin við Æ tvisvar ´´
+https://codeburst.io/javascript-what-are-template-literals-5d08a50ef2e3
+
+vita að það er hægt að nota JSX utan React, ekki vinsælt en hægt
+
+rifja upp líka practice af self closing tags:
+element sem hefur ekkert á milli <eh></eh> má skrifa svona:
+
+<eh />
+
+tagið sjálft, bil og svo /
+
+
+
+import og export með javascript, sjá linkinn fyrir neðan til að skilja betur með commonJS og ES6, og hvernig Babel breytir á milli:
+https://stackoverflow.com/questions/31354559/using-node-js-require-vs-es6-import-export
+
+þegar maður er með ákveðna skrá einsog lala.js og vill nota það sem er inní lala.js inní app.js þá er hægt að gera það svona:
+
+
+(inní lala.js)
+
+const x = "mikilvægur texti eða function, eða heil síða af kóða"
+
+export.... sko, langar að vita best practice og læra betur,
+https://javascript.info/import-export
+
+skoða hvað wildcard í code er nákvæmlega,
+https://www.computerhope.com/jargon/w/wildcard.htm
+https://www.geeksforgeeks.org/wildcards-in-java/
+
+læra vel arrow function og nota aldrei aftur orðið 'function',,, skrítið að hún sé að nefna þetta núna, 
+JS moduleið var svoo ótrúlega rushed
